@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth antialiased;
+    font-family: 'Inter', 'Poppins', sans-serif;
+  }
+  
+  body {
+    @apply bg-[#F7F7F5] text-[#111111] selection:bg-[#6B705C]/20;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-premium {
+    @apply px-8 py-3 bg-[#6B705C] text-white rounded-xl transition-all duration-300 hover:bg-[#5a5e4d] hover:shadow-lg active:scale-95 disabled:opacity-50 text-xs font-bold uppercase tracking-widest;
+  }
+
+  .card-premium {
+    @apply bg-white rounded-3xl border border-[#E5E5E5] shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .input-premium {
+    @apply w-full bg-white border border-[#E5E5E5] rounded-xl px-5 py-3.5 text-[#111111] placeholder-[#666666] focus:outline-none focus:border-[#6B705C] transition-all duration-300 font-medium shadow-sm;
+  }
+
+  .fade-in {
+    @apply animate-[fadeIn_0.8s_ease-out_forwards];
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F7F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E5E5E5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6B705C;
+}
