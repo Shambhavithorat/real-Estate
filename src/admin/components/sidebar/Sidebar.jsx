@@ -40,11 +40,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               to={item.path}
               end={item.exact}
               onClick={() => setIsOpen(false)}
-              className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold tracking-wider uppercase transition-all ${isActive ? 'bg-[#111111] text-white shadow-lg' : 'text-[#666666] hover:bg-[#F7F7F5] hover:text-[#111111]'}`}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-5 py-4 rounded-2xl text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300
+                ${isActive 
+                  ? 'bg-[#111111] text-white shadow-[0_20px_40px_rgba(0,0,0,0.1)] scale-[1.02]' 
+                  : 'text-[#666666] hover:bg-[#F7F7F5] hover:text-[#111111] hover:translate-x-1'}
+              `}
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-              </svg>
+              <div className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-white/10' : 'bg-transparent'}`}>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                </svg>
+              </div>
               {item.name}
             </NavLink>
           ))}

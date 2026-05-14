@@ -18,7 +18,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Buy', href: '/buy' },
     { name: 'Rent', href: '/rent' },
-    { name: 'Sell', href: '/sell' },
+    { name: 'Inquiries', href: '/sell' },
     { name: 'Agents', href: '/agents' },
   ];
 

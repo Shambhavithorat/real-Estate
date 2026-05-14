@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { propertyService } from '../../../user/services/propertyService';
 
 const StatCard = ({ title, value, icon, trend, loading }) => (
-  <div className="bg-white p-6 rounded-2xl border border-[#E5E5E5] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+  <div className="bg-white p-6 rounded-[32px] border border-[#E5E5E5] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 relative overflow-hidden group">
     <div className="absolute -top-4 -right-4 p-4 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110">
       <svg className="w-32 h-32 text-[#6B705C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d={icon} />
@@ -48,10 +48,12 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-[#111111]">Admin Dashboard (Connected to Firestore)</h1>
-        <p className="text-sm text-[#666666] mt-1">Real-time statistics for your platform.</p>
+    <div className="space-y-10 pb-12 relative min-h-screen bg-[#FBFBFB] -m-4 p-8 rounded-[40px]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 px-2">
+        <div className="space-y-1">
+          <h1 className="text-5xl font-black text-[#111111] tracking-tighter">Admin <span className="text-[#6B705C] italic font-serif">Dashboard</span></h1>
+          <p className="text-sm text-[#666666] font-medium tracking-tight">Real-time statistics for your platform.</p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

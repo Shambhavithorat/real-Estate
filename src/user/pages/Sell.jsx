@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropertyCard from '../components/property/PropertyCard';
+import { inquiryService } from '../services/inquiryService';
 
 const Sell = () => {
   const [formData, setFormData] = useState({
@@ -11,181 +12,154 @@ const Sell = () => {
     baths: '',
     area: '',
     image: '',
-    description: ''
+    description: '',
+    sellerName: '',
+    sellerEmail: '',
+    sellerPhone: ''
   });
 
-  const [myProperties, setMyProperties] = useState([
-    { id: 101, title: 'Bayside Mansion', price: '$12,500,000', location: 'Miami, FL', beds: 7, baths: 6, area: '9,200', type: 'Mansion', status: 'sold', image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80' },
-    { id: 102, title: 'The Ivy Estate', price: '$8,200,000', location: 'Greenwich, CT', beds: 5, baths: 5, area: '6,800', type: 'Villa', status: 'sold', image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80' },
-    { id: 103, title: 'Urban Loft', price: '$4,150,000', location: 'Chicago, IL', beds: 3, baths: 3, area: '3,100', type: 'Apartment', status: 'sold', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80' },
-    { id: 104, title: 'Canyon View', price: '$6,900,000', location: 'Aspen, CO', beds: 5, baths: 4, area: '5,400', type: 'House', status: 'sold', image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80' },
-  ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const newProperty = {
+    try {
+      const inquiryData = {
         ...formData,
-        id: Date.now(),
-        price: `$${Number(formData.price).toLocaleString()}`
+        subject: 'New Property Listing Inquiry',
+        type: 'Listing Request',
+        customerName: formData.sellerName,
+        customerEmail: formData.sellerEmail,
+        customerPhone: formData.sellerPhone,
+        timestamp: new Date().toISOString()
       };
-      setMyProperties([newProperty, ...myProperties]);
-      setIsSubmitting(false);
+
+      await inquiryService.addInquiry(inquiryData);
+      
+      alert("Success! Your property inquiry has been submitted. Our team will contact you shortly.");
+      
       setFormData({
-        title: '',
-        price: '',
-        location: '',
-        type: 'Villa',
-        beds: '',
-        baths: '',
-        area: '',
-        image: '',
-        description: ''
+        title: '', price: '', location: '', type: 'Villa', beds: '', baths: '', area: '', image: '', description: '',
+        sellerName: '', sellerEmail: '', sellerPhone: ''
       });
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }, 1500);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      alert("Error sending inquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] pt-[120px] pb-24 fade-in">
+    <div className="min-h-screen bg-[#FBFBFB] pt-[120px] pb-24 fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+        {/* Header Section */}
+        <div className="text-center space-y-8 mb-20">
+          <div className="space-y-4">
+            <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-[#6B705C] block">Professional Partnerships</span>
+            <h1 className="text-6xl md:text-7xl font-black text-[#111111] tracking-tighter leading-tight">
+              List Your <span className="text-[#6B705C] italic font-serif font-medium">Legacy</span> <br /> 
+              With URBN
+            </h1>
+            <p className="text-[#666666] text-xl font-medium max-w-2xl mx-auto opacity-80">
+              Our global network of high-net-worth investors and sophisticated buyers awaits your architectural masterpiece.
+            </p>
+          </div>
+        </div>
+
+        {/* Hero Marketing / Social Proof */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
+          {[
+            { label: 'Global Exposure', desc: 'Listing translated into 12 languages' },
+            { label: 'Targeted Marketing', desc: 'AI-driven buyer matching system' },
+            { label: 'Verified Network', desc: 'Access to 50k+ qualified investors' }
+          ].map((item, idx) => (
+            <div key={idx} className="p-10 bg-white rounded-[40px] border border-[#F0F0F0] shadow-sm text-center space-y-4">
+              <h3 className="text-xs font-bold text-[#111111] uppercase tracking-[0.3em]">{item.label}</h3>
+              <p className="text-sm text-[#666666] font-medium leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Centered Inquiry Form - Positioned above footer */}
+        <div className="max-w-4xl mx-auto relative">
+          <div className="absolute inset-0 bg-[#6B705C]/5 blur-[150px] rounded-full -z-10" />
           
-          {/* Left: Form */}
-          <div className="space-y-12">
-            <div className="space-y-4">
-              <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#6B705C] block">Partner with URBN</span>
-              <h1 className="text-5xl font-bold text-[#111111]">List Your <br /> <span className="text-[#6B705C] italic font-medium">Architectural</span> Masterpiece</h1>
-              <p className="text-[#666666] text-lg font-medium max-w-md">Our global network of high-net-worth individuals is waiting for your property.</p>
+          <div className="bg-white p-12 md:p-16 rounded-[60px] shadow-[0_50px_100px_rgba(0,0,0,0.05)] border border-[#F0F0F0] space-y-12">
+            <div className="text-center space-y-3">
+              <h2 className="text-3xl font-bold text-[#111111] tracking-tight">Property <span className="text-[#6B705C] italic font-medium">Inquiry</span> Form</h2>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#999999]">Submit your property details for expert valuation</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="card-premium p-10 space-y-8 bg-white shadow-2xl">
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 gap-6">
-                  <div className="space-y-2">
+            <form onSubmit={handleSubmit} className="space-y-12">
+              {/* Personal Information */}
+              <div className="space-y-8">
+                <div className="h-[1px] bg-[#F5F5F5] w-full" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Full Name</label>
+                    <input type="text" name="sellerName" value={formData.sellerName} onChange={handleChange} placeholder="John Doe" className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5 outline-none focus:ring-2 focus:ring-[#111111]/5 transition-all" required />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Email Address</label>
+                    <input type="email" name="sellerEmail" value={formData.sellerEmail} onChange={handleChange} placeholder="john@example.com" className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5 outline-none focus:ring-2 focus:ring-[#111111]/5 transition-all" required />
+                  </div>
+                </div>
+              </div>
+
+              {/* Property Details */}
+              <div className="space-y-8">
+                <div className="grid grid-cols-1 gap-8">
+                  <div className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Property Title</label>
-                    <input 
-                      type="text" name="title" value={formData.title} onChange={handleChange}
-                      placeholder="e.g. Minimalist Oceanfront Villa" 
-                      className="input-premium py-4" required 
-                    />
+                    <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Modern Cliffside Villa" className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5 outline-none focus:ring-2 focus:ring-[#111111]/5 transition-all" required />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Price (USD)</label>
-                    <input 
-                      type="number" name="price" value={formData.price} onChange={handleChange}
-                      placeholder="8500000" 
-                      className="input-premium py-4" required 
-                    />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Price (₹)</label>
+                    <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="85,00,000" className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5 outline-none" required />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Location</label>
-                    <input 
-                      type="text" name="location" value={formData.location} onChange={handleChange}
-                      placeholder="City, State" 
-                      className="input-premium py-4" required 
-                    />
+                    <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="Pune, Maharashtra" className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5 outline-none" required />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-6">
-                   <div className="space-y-2">
+                   <div className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Beds</label>
-                    <input type="number" name="beds" value={formData.beds} onChange={handleChange} className="input-premium py-4" required />
+                    <input type="number" name="beds" value={formData.beds} onChange={handleChange} className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5" required />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Baths</label>
-                    <input type="number" name="baths" value={formData.baths} onChange={handleChange} className="input-premium py-4" required />
+                    <input type="number" name="baths" value={formData.baths} onChange={handleChange} className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5" required />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Sqft</label>
-                    <input type="number" name="area" value={formData.area} onChange={handleChange} className="input-premium py-4" required />
+                    <input type="number" name="area" value={formData.area} onChange={handleChange} className="w-full bg-[#F7F7F5] border-none rounded-2xl px-6 py-5" required />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Image URL</label>
-                  <input 
-                    type="text" name="image" value={formData.image} onChange={handleChange}
-                    placeholder="https://images.unsplash.com/..." 
-                    className="input-premium py-4" 
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Description</label>
-                  <textarea 
-                    name="description" value={formData.description} onChange={handleChange}
-                    rows="4" className="input-premium py-4 resize-none" 
-                  ></textarea>
+                <div className="space-y-3">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Property Description</label>
+                  <textarea name="description" value={formData.description} onChange={handleChange} rows="5" className="w-full bg-[#F7F7F5] border-none rounded-[32px] px-8 py-6 outline-none resize-none" placeholder="Describe the unique architectural features..." required></textarea>
                 </div>
               </div>
 
-              <button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="w-full btn-premium py-5 flex items-center justify-center gap-3"
-              >
-                {isSubmitting ? (
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : 'Submit Listing'}
+              <button type="submit" disabled={isSubmitting} className="w-full py-6 bg-[#111111] text-white rounded-[24px] text-[11px] font-bold uppercase tracking-[0.4em] shadow-2xl hover:bg-[#6B705C] transition-all flex items-center justify-center gap-4 active:scale-95">
+                {isSubmitting ? <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : 'Send Listing Inquiry'}
               </button>
             </form>
           </div>
-
-          {/* Right: Preview / Marketing */}
-          <div className="hidden lg:block space-y-12">
-             <div className="rounded-[40px] overflow-hidden h-[500px] shadow-2xl relative group">
-                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80" alt="Marketing" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-black/20" />
-                <div className="absolute bottom-10 left-10 right-10 p-8 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20">
-                   <p className="text-white font-bold text-xl leading-relaxed">"URBN turned our property listing into a global sensation. We sold in just 48 hours."</p>
-                   <p className="text-white/60 text-xs font-bold uppercase tracking-widest mt-4">— David H., Penthouse Owner</p>
-                </div>
-             </div>
-
-             <div className="grid grid-cols-2 gap-8">
-                {[
-                  { label: 'Global Reach', desc: 'Access to 10M+ luxury buyers' },
-                  { label: 'AI Matching', desc: 'Predictive buyer analytics' },
-                ].map(item => (
-                  <div key={item.label} className="space-y-2">
-                    <h4 className="text-sm font-bold text-[#111111] uppercase tracking-widest">{item.label}</h4>
-                    <p className="text-xs text-[#666666] leading-relaxed">{item.desc}</p>
-                  </div>
-                ))}
-             </div>
-          </div>
-
         </div>
-
-        {/* User Added Properties */}
-        {myProperties.length > 0 && (
-          <div className="mt-32 space-y-12 fade-in">
-             <div className="flex items-center gap-6">
-                <div className="h-[1px] flex-1 bg-[#E5E5E5]" />
-                <h2 className="text-2xl font-bold text-[#111111] uppercase tracking-[0.2em]">Successful Sales Portfolio</h2>
-                <div className="h-[1px] flex-1 bg-[#E5E5E5]" />
-             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                {myProperties.map(property => (
-                  <PropertyCard key={property.id} property={property} />
-                ))}
-             </div>
-          </div>
-        )}
 
       </div>
     </div>

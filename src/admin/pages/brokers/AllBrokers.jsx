@@ -110,7 +110,7 @@ const AllBrokers = () => {
     <div className="space-y-10 pb-12 relative min-h-screen bg-[#FBFBFB] -m-4 p-8 rounded-[40px]">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 px-2">
         <div className="space-y-1">
-          <h1 className="text-5xl font-black text-[#111111] tracking-tighter">Premium <span className="text-[#6B705C] italic font-serif">Brokers</span></h1>
+          <h1 className="text-5xl font-black text-[#111111] tracking-tighter">Luxury <span className="text-[#6B705C] italic font-serif">Brokers</span></h1>
           <p className="text-xs font-bold text-[#999999] uppercase tracking-[0.4em] flex items-center gap-3"><span className="w-10 h-[1px] bg-[#6B705C]" />Network Management</p>
         </div>
         <button onClick={() => { resetForm(); setShowAddModal(true); }} className="bg-[#111111] text-white py-5 px-12 text-[10px] font-bold uppercase tracking-[0.3em] rounded-[24px] hover:bg-[#6B705C] transition-all shadow-xl hover:-translate-y-2 group flex items-center gap-4">

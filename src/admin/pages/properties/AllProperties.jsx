@@ -104,10 +104,13 @@ const AllProperties = () => {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div><h1 className="text-2xl font-bold text-[#111111]">Platform Properties</h1><p className="text-sm text-[#666666] mt-1">Live from Cloud Storage</p></div>
-        <button onClick={() => { resetForm(); setShowAddModal(true); }} className="bg-[#111111] text-white py-3 px-6 text-xs flex items-center gap-2 rounded-xl hover:bg-[#6B705C] transition-all shadow-lg">+ Add Property</button>
+    <div className="space-y-10 pb-12 relative min-h-screen bg-[#FBFBFB] -m-4 p-8 rounded-[40px]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 px-2">
+        <div className="space-y-1">
+          <h1 className="text-5xl font-black text-[#111111] tracking-tighter">Platform <span className="text-[#6B705C] italic font-serif">Properties</span></h1>
+          <p className="text-sm text-[#666666] font-medium tracking-tight">Live from Cloud Storage</p>
+        </div>
+        <button onClick={() => { resetForm(); setShowAddModal(true); }} className="bg-[#111111] text-white py-4 px-8 text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 rounded-[20px] hover:bg-[#6B705C] transition-all shadow-xl">+ Add New Asset</button>
       </div>
 
       <div className="bg-white rounded-[32px] border border-[#F0F0F0] overflow-hidden shadow-sm">

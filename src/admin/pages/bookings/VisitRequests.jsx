@@ -8,11 +8,11 @@ const VisitRequests = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-[#111111]">Visit Requests</h1>
-          <p className="text-sm text-[#666666] mt-1">Manage physical and virtual property tours.</p>
+    <div className="space-y-10 pb-12 relative min-h-screen bg-[#FBFBFB] -m-4 p-8 rounded-[40px]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 px-2">
+        <div className="space-y-1">
+          <h1 className="text-5xl font-black text-[#111111] tracking-tighter">Visit <span className="text-[#6B705C] italic font-serif">Requests</span></h1>
+          <p className="text-sm text-[#666666] font-medium tracking-tight">Manage physical and virtual property tours.</p>
         </div>
       </div>
 

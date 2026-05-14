@@ -2,8 +2,13 @@ import React from 'react';
 
 const Settings = () => {
   return (
-    <div className="space-y-6 max-w-3xl">
-      <h1 className="text-2xl font-bold text-[#111111]">Platform Settings</h1>
+    <div className="space-y-10 pb-12 relative min-h-screen bg-[#FBFBFB] -m-4 p-8 rounded-[40px]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8 px-2">
+        <div className="space-y-1">
+          <h1 className="text-5xl font-black text-[#111111] tracking-tighter">System <span className="text-[#6B705C] italic font-serif">Configurations</span></h1>
+          <p className="text-sm text-[#666666] font-medium tracking-tight">Manage core platform parameters and preferences.</p>
+        </div>
+      </div>
       
       <div className="bg-white rounded-2xl border border-[#E5E5E5] shadow-sm overflow-hidden">
          <div className="p-6 border-b border-[#E5E5E5]">
