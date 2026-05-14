@@ -23,11 +23,11 @@ const Login = () => {
       const { userData } = await login(email, password);
       
       if (userData?.role === 'admin') {
-        navigate('/admin', { replace: true });
+        navigate('/admin/dashboard', { replace: true });
       } else if (userData?.role === 'broker') {
-        navigate('/broker', { replace: true });
+        navigate('/broker/dashboard', { replace: true });
       } else {
-        navigate('/user', { replace: true });
+        navigate('/', { replace: true });
       }
     } catch (err) {
       setError('Invalid email or password. Please try again.');

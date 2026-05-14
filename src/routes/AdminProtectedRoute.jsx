@@ -15,11 +15,11 @@ const AdminProtectedRoute = ({ children }) => {
   }
 
   if (!currentUser) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/admin" state={{ from: location }} replace />;
   }
 
   if (userData?.role !== 'admin') {
-    if (userData?.role === 'broker') return <Navigate to="/broker" replace />;
+    if (userData?.role === 'broker') return <Navigate to="/broker/dashboard" replace />;
     return <Navigate to="/user" replace />;
   }
 

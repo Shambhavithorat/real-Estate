@@ -19,8 +19,8 @@ const UserProtectedRoute = ({ children }) => {
   }
 
   if (userData?.role !== 'user') {
-    if (userData?.role === 'admin') return <Navigate to="/admin" replace />;
-    if (userData?.role === 'broker') return <Navigate to="/broker" replace />;
+    if (userData?.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
+    if (userData?.role === 'broker') return <Navigate to="/broker/dashboard" replace />;
   }
 
   return children;

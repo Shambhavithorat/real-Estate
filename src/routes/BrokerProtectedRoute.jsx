@@ -15,11 +15,11 @@ const BrokerProtectedRoute = ({ children }) => {
   }
 
   if (!currentUser) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/broker" state={{ from: location }} replace />;
   }
 
   if (userData?.role !== 'broker') {
-    if (userData?.role === 'admin') return <Navigate to="/admin" replace />;
+    if (userData?.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
     return <Navigate to="/user" replace />;
   }
 

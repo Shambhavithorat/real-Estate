@@ -23,6 +23,7 @@ import ScrollToTop from './user/components/common/ScrollToTop';
 // Admin Imports
 import AdminLayout from './admin/layouts/AdminLayout';
 import AdminDashboard from './admin/pages/dashboard/Dashboard';
+import AdminLogin from './admin/pages/auth/Login';
 import AllProperties from './admin/pages/properties/AllProperties';
 import AllUsers from './admin/pages/users/AllUsers';
 import AllBrokers from './admin/pages/brokers/AllBrokers';
@@ -36,6 +37,7 @@ import AddBroker from './admin/pages/brokers/AddBroker';
 // Broker Imports
 import BrokerLayout from './broker/layouts/BrokerLayout';
 import BrokerDashboard from './broker/pages/dashboard/Dashboard';
+import BrokerLogin from './broker/pages/auth/Login';
 import BrokerProperties from './broker/pages/properties/MyProperties';
 import AddProperty from './broker/pages/properties/AddProperty';
 import BrokerInquiries from './broker/pages/inquiries/Inquiries';
@@ -50,13 +52,15 @@ function App() {
       <AuthProvider>
         <ScrollToTop />
         <Routes>
-          {/* Initial entry point redirect to Login */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
+          {/* Admin Login Route */}
+          <Route path="/admin" element={<AdminLogin />} />
+
           {/* Admin Panel Routes (Protected) */}
-          <Route path="/admin" element={
+          <Route path="/admin/dashboard" element={
             <AdminProtectedRoute>
               <AdminLayout />
             </AdminProtectedRoute>
@@ -73,8 +77,11 @@ function App() {
             <Route path="settings" element={<Settings />} />
           </Route>
 
+          {/* Broker Login Route */}
+          <Route path="/broker" element={<BrokerLogin />} />
+
           {/* Broker Panel Routes (Protected) */}
-          <Route path="/broker" element={
+          <Route path="/broker/dashboard" element={
             <BrokerProtectedRoute>
               <BrokerLayout />
             </BrokerProtectedRoute>
@@ -89,12 +96,8 @@ function App() {
             <Route path="profile" element={<ProfileSettings />} />
           </Route>
 
-          {/* User Panel Routes (Protected) */}
-          <Route path="/user" element={
-            <UserProtectedRoute>
-              <UserLayout />
-            </UserProtectedRoute>
-          }>
+          {/* User Panel Routes (Public by default) */}
+          <Route path="/" element={<UserLayout />}>
             <Route index element={<Home />} />
             <Route path="buy" element={<Buy />} />
             <Route path="rent" element={<Rent />} />
@@ -105,7 +108,7 @@ function App() {
           </Route>
 
           {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </Router>
