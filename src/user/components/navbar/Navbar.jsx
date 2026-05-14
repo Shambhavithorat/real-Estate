@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../shared/hooks/useAuth';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { currentUser, userData, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -24,10 +27,19 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path;
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+      setIsProfileOpen(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // For now, redirect to Buy page with search param
       navigate(`/buy?q=${encodeURIComponent(searchQuery)}`);
       setIsSearchOpen(false);
       setSearchQuery('');
@@ -71,7 +83,6 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Actions */}
             <div className="hidden lg:flex items-center space-x-8">
               <button
                 onClick={() => setIsSearchOpen(true)}
@@ -81,12 +92,55 @@ const Navbar = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
-              <Link to="/login" className="text-xs font-bold uppercase tracking-widest text-[#111111] hover:text-[#6B705C]">
-                Sign In
-              </Link>
-              <Link to="/signup" className="px-6 py-2.5 bg-[#6B705C] text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded-full hover:bg-[#5a5e4d] transition-all shadow-md">
-                Sign Up
-              </Link>
+              
+              {currentUser ? (
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center gap-3 group"
+                  >
+                    <div className="text-right">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#111111] group-hover:text-[#6B705C] transition-colors line-clamp-1">{userData?.displayName || 'User'}</p>
+                      <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#666666]">{userData?.role}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-[#F7F7F5] rounded-full flex items-center justify-center border border-[#E5E5E5] group-hover:border-[#6B705C] transition-all">
+                      <span className="text-[10px] font-bold text-[#6B705C] uppercase">{(userData?.displayName || 'U').charAt(0)}</span>
+                    </div>
+                  </button>
+
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-4 w-56 bg-white border border-[#E5E5E5] shadow-2xl rounded-2xl py-3 z-50 fade-in">
+                      <div className="px-5 py-2 border-b border-[#E5E5E5] mb-2">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#111111]">{userData?.displayName}</p>
+                        <p className="text-[8px] font-medium text-[#666666] truncate">{currentUser.email}</p>
+                      </div>
+                      
+                      {userData?.role === 'admin' && (
+                        <Link to="/admin" className="block px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#F7F7F5]">Admin Dashboard</Link>
+                      )}
+                      {userData?.role === 'broker' && (
+                        <Link to="/broker" className="block px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#F7F7F5]">Broker Dashboard</Link>
+                      )}
+                      
+                      <button 
+                        onClick={handleLogout}
+                        className="w-full text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Link to="/login" className="text-xs font-bold uppercase tracking-widest text-[#111111] hover:text-[#6B705C]">
+                    Sign In
+                  </Link>
+                  <Link to="/signup" className="px-6 py-2.5 bg-[#6B705C] text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded-full hover:bg-[#5a5e4d] transition-all shadow-md">
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Toggle */}
@@ -120,8 +174,31 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="pt-6 border-t border-[#E5E5E5] flex flex-col space-y-4">
-              <Link to="/login" className="text-sm font-bold uppercase tracking-widest text-[#111111]">Sign In</Link>
-              <Link to="/signup" className="w-full py-4 bg-[#6B705C] text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl">Sign Up</Link>
+              {currentUser ? (
+                <>
+                  <div className="px-2 py-2">
+                    <p className="text-sm font-bold uppercase tracking-widest text-[#111111]">{userData?.displayName}</p>
+                    <p className="text-xs text-[#666666]">{userData?.role}</p>
+                  </div>
+                  {userData?.role === 'admin' && (
+                    <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Admin Dashboard</Link>
+                  )}
+                  {userData?.role === 'broker' && (
+                    <Link to="/broker" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Broker Dashboard</Link>
+                  )}
+                  <button 
+                    onClick={handleLogout}
+                    className="w-full py-4 bg-red-500 text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Sign In</Link>
+                  <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="w-full py-4 bg-[#6B705C] text-white text-center text-xs font-bold uppercase tracking-widest rounded-xl">Sign Up</Link>
+                </>
+              )}
             </div>
           </div>
         </div>

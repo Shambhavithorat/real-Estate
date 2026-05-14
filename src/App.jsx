@@ -25,6 +25,7 @@ import AllAgents from './admin/pages/agents/AllAgents';
 import Inquiries from './admin/pages/inquiries/Inquiries';
 import VisitRequests from './admin/pages/bookings/VisitRequests';
 import Settings from './admin/pages/settings/Settings';
+import AdminLogin from './admin/pages/auth/Login';
 
 // Broker Imports
 import BrokerLayout from './broker/layouts/BrokerLayout';
@@ -36,6 +37,10 @@ import BrokerVisits from './broker/pages/visits/VisitRequests';
 import BrokerAnalytics from './broker/pages/analytics/Analytics';
 import BrokerReviews from './broker/pages/reviews/Reviews';
 import ProfileSettings from './broker/pages/profile/ProfileSettings';
+import BrokerLogin from './broker/pages/auth/Login';
+import BrokerRegister from './broker/pages/auth/Register';
+
+import ProtectedRoute from './shared/components/auth/ProtectedRoute';
 
 function App() {
   return (
@@ -43,8 +48,15 @@ function App() {
       <AuthProvider>
         <ScrollToTop />
         <Routes>
-          {/* Admin Panel Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
+          {/* Admin Auth */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+
+          {/* Admin Panel Routes (Protected) */}
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<AdminDashboard />} />
             <Route path="properties" element={<AllProperties />} />
             <Route path="users" element={<AllUsers />} />
@@ -55,8 +67,16 @@ function App() {
             <Route path="settings" element={<Settings />} />
           </Route>
 
-          {/* Broker Panel Routes */}
-          <Route path="/broker" element={<BrokerLayout />}>
+          {/* Broker Auth */}
+          <Route path="/broker/login" element={<BrokerLogin />} />
+          <Route path="/broker/register" element={<BrokerRegister />} />
+
+          {/* Broker Panel Routes (Protected) */}
+          <Route path="/broker" element={
+            <ProtectedRoute allowedRoles={['broker', 'admin']}>
+              <BrokerLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<BrokerDashboard />} />
             <Route path="properties" element={<MyProperties />} />
             <Route path="add-property" element={<AddProperty />} />
@@ -72,7 +92,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/buy" element={<Buy />} />
             <Route path="/rent" element={<Rent />} />
-            <Route path="/sell" element={<Sell />} />
+            <Route path="/sell" element={
+              <ProtectedRoute allowedRoles={['user', 'broker', 'admin']}>
+                <Sell />
+              </ProtectedRoute>
+            } />
             <Route path="/agents" element={<Agents />} />
             <Route path="/agents/:id" element={<AgentProfile />} />
             <Route path="/properties/:id" element={<PropertyDetailsPage />} />

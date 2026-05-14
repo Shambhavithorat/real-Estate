@@ -32,8 +32,20 @@ export const AuthProvider = ({ children }) => {
     return userCredential.user;
   };
 
-  const login = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const login = async (email, password) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+    
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      // Normalize role field (handle both 'role' and 'Role', and make lowercase)
+      const normalizedRole = (data.role || data.Role || 'user').toLowerCase();
+      const updatedData = { ...data, role: normalizedRole };
+      setUserData(updatedData);
+      return { user: userCredential.user, userData: updatedData };
+    }
+    
+    return { user: userCredential.user, userData: null };
   };
 
   const logout = () => {
