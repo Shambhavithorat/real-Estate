@@ -74,7 +74,7 @@ const PropertyListingPage = () => {
                 setIsMobileOpen={setMobileFiltersOpen}
             />
 
-            <div className={lex-1 transition-all duration-500 ease-in-out }>
+            <div className={`flex-1 transition-all duration-500 ease-in-out ${desktopCollapsed ? 'lg:ml-0' : 'lg:pl-[340px]'}`}>
                 <div className="pt-20 lg:pt-24 px-4 sm:px-6 lg:px-12 py-8 max-w-[1600px] mx-auto">
                     {/* Header Section */}
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">

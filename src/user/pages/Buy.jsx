@@ -12,7 +12,7 @@ const Buy = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const data = await propertyService.getAllProperties();
+        const data = await propertyService.getApprovedProperties();
         setProperties(data);
       } catch (error) {
         console.error("Error fetching properties for Buy page:", error);

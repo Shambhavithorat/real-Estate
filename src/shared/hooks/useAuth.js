@@ -4,7 +4,9 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   createUserWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  setPersistence,
+  browserSessionPersistence
 } from 'firebase/auth';
 import { auth, db } from '../firebase/firebaseConfig';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -17,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const signup = async (email, password, displayName, role = 'user') => {
+    await setPersistence(auth, browserSessionPersistence);
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName });
     
@@ -33,6 +36,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
+    await setPersistence(auth, browserSessionPersistence);
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
     
@@ -53,6 +57,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    // Ensure persistence is set correctly on load as well
+    setPersistence(auth, browserSessionPersistence).catch(console.error);
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {

@@ -20,8 +20,15 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(email, password);
-      navigate(from, { replace: true });
+      const { userData } = await login(email, password);
+      
+      if (userData?.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else if (userData?.role === 'broker') {
+        navigate('/broker', { replace: true });
+      } else {
+        navigate('/user', { replace: true });
+      }
     } catch (err) {
       setError('Invalid email or password. Please try again.');
       console.error(err);

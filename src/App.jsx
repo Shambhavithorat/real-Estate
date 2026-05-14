@@ -1,6 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './shared/hooks/useAuth';
+
+// Protected Routes
+import AdminProtectedRoute from './routes/AdminProtectedRoute';
+import BrokerProtectedRoute from './routes/BrokerProtectedRoute';
+import UserProtectedRoute from './routes/UserProtectedRoute';
 
 // User Imports
 import Home from './user/pages/Home';
@@ -12,7 +17,7 @@ import Login from './user/pages/Login';
 import Signup from './user/pages/Signup';
 import Agents from './user/pages/Agents';
 import AgentProfile from './user/pages/AgentProfile';
-import MainLayout from './user/layouts/MainLayout';
+import UserLayout from './user/layouts/UserLayout';
 import ScrollToTop from './user/components/common/ScrollToTop';
 
 // Admin Imports
@@ -25,22 +30,19 @@ import AllAgents from './admin/pages/agents/AllAgents';
 import Inquiries from './admin/pages/inquiries/Inquiries';
 import VisitRequests from './admin/pages/bookings/VisitRequests';
 import Settings from './admin/pages/settings/Settings';
-import AdminLogin from './admin/pages/auth/Login';
+import AdminRequests from './admin/pages/requests/Requests';
+import AddBroker from './admin/pages/brokers/AddBroker';
 
 // Broker Imports
 import BrokerLayout from './broker/layouts/BrokerLayout';
 import BrokerDashboard from './broker/pages/dashboard/Dashboard';
-import MyProperties from './broker/pages/properties/MyProperties';
+import BrokerProperties from './broker/pages/properties/MyProperties';
 import AddProperty from './broker/pages/properties/AddProperty';
 import BrokerInquiries from './broker/pages/inquiries/Inquiries';
 import BrokerVisits from './broker/pages/visits/VisitRequests';
 import BrokerAnalytics from './broker/pages/analytics/Analytics';
 import BrokerReviews from './broker/pages/reviews/Reviews';
 import ProfileSettings from './broker/pages/profile/ProfileSettings';
-import BrokerLogin from './broker/pages/auth/Login';
-import BrokerRegister from './broker/pages/auth/Register';
-
-import ProtectedRoute from './shared/components/auth/ProtectedRoute';
 
 function App() {
   return (
@@ -48,37 +50,37 @@ function App() {
       <AuthProvider>
         <ScrollToTop />
         <Routes>
-          {/* Admin Auth */}
-          <Route path="/admin/login" element={<AdminLogin />} />
+          {/* Initial entry point redirect to Login */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
           {/* Admin Panel Routes (Protected) */}
           <Route path="/admin" element={
-            <ProtectedRoute allowedRoles={['admin']}>
+            <AdminProtectedRoute>
               <AdminLayout />
-            </ProtectedRoute>
+            </AdminProtectedRoute>
           }>
             <Route index element={<AdminDashboard />} />
             <Route path="properties" element={<AllProperties />} />
             <Route path="users" element={<AllUsers />} />
             <Route path="brokers" element={<AllBrokers />} />
+            <Route path="add-broker" element={<AddBroker />} />
+            <Route path="requests" element={<AdminRequests />} />
             <Route path="agents" element={<AllAgents />} />
             <Route path="inquiries" element={<Inquiries />} />
             <Route path="visits" element={<VisitRequests />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 
-          {/* Broker Auth */}
-          <Route path="/broker/login" element={<BrokerLogin />} />
-          <Route path="/broker/register" element={<BrokerRegister />} />
-
           {/* Broker Panel Routes (Protected) */}
           <Route path="/broker" element={
-            <ProtectedRoute allowedRoles={['broker', 'admin']}>
+            <BrokerProtectedRoute>
               <BrokerLayout />
-            </ProtectedRoute>
+            </BrokerProtectedRoute>
           }>
             <Route index element={<BrokerDashboard />} />
-            <Route path="properties" element={<MyProperties />} />
+            <Route path="properties" element={<BrokerProperties />} />
             <Route path="add-property" element={<AddProperty />} />
             <Route path="inquiries" element={<BrokerInquiries />} />
             <Route path="visits" element={<BrokerVisits />} />
@@ -87,22 +89,23 @@ function App() {
             <Route path="profile" element={<ProfileSettings />} />
           </Route>
 
-          {/* User Panel Routes */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/buy" element={<Buy />} />
-            <Route path="/rent" element={<Rent />} />
-            <Route path="/sell" element={
-              <ProtectedRoute allowedRoles={['user', 'broker', 'admin']}>
-                <Sell />
-              </ProtectedRoute>
-            } />
-            <Route path="/agents" element={<Agents />} />
-            <Route path="/agents/:id" element={<AgentProfile />} />
-            <Route path="/properties/:id" element={<PropertyDetailsPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+          {/* User Panel Routes (Protected) */}
+          <Route path="/user" element={
+            <UserProtectedRoute>
+              <UserLayout />
+            </UserProtectedRoute>
+          }>
+            <Route index element={<Home />} />
+            <Route path="buy" element={<Buy />} />
+            <Route path="rent" element={<Rent />} />
+            <Route path="sell" element={<Sell />} />
+            <Route path="agents" element={<Agents />} />
+            <Route path="agents/:id" element={<AgentProfile />} />
+            <Route path="properties/:id" element={<PropertyDetailsPage />} />
           </Route>
+
+          {/* Fallback route */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>
     </Router>

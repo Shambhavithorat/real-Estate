@@ -31,6 +31,20 @@ export const propertyService = {
     });
   },
 
+  // Real-time listener for pending properties
+  subscribePendingProperties: (callback) => {
+    const q = query(collection(db, COLLECTION_NAME), where('status', '==', 'pending'));
+    return onSnapshot(q, (snapshot) => {
+      const properties = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      callback(properties);
+    }, (error) => {
+      console.error('Error in pending properties listener: ', error);
+    });
+  },
+
   // Get all properties from this collection
   getAllProperties: async () => {
     try {
@@ -41,6 +55,21 @@ export const propertyService = {
       }));
     } catch (error) {
       console.error('Error fetching properties: ', error);
+      throw error;
+    }
+  },
+
+  // Get only approved properties
+  getApprovedProperties: async () => {
+    try {
+      const q = query(collection(db, COLLECTION_NAME), where('status', '==', 'approved'));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+    } catch (error) {
+      console.error('Error fetching approved properties: ', error);
       throw error;
     }
   },

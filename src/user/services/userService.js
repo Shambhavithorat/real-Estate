@@ -31,6 +31,31 @@ export const userService = {
     });
   },
 
+  // Real-time listener for brokers
+  subscribeBrokers: (callback) => {
+    const q = query(collection(db, COLLECTION_NAME), where('role', '==', 'broker'));
+    return onSnapshot(q, (snapshot) => {
+      const users = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      callback(users);
+    }, (error) => {
+      console.error('Error in broker listener: ', error);
+    });
+  },
+
+  // Delete a user (broker)
+  deleteUser: async (id) => {
+    try {
+      const docRef = doc(db, COLLECTION_NAME, id);
+      await deleteDoc(docRef);
+    } catch (error) {
+      console.error('Error deleting user: ', error);
+      throw error;
+    }
+  },
+
   // Get all users
   getAllUsers: async () => {
     try {
