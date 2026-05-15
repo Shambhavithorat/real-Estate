@@ -11,7 +11,7 @@ const AdminLogin = () => {
   const { login, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/admin";
+  const from = location.state?.from?.pathname || "/admin/dashboard";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

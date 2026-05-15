@@ -17,18 +17,18 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   if (!currentUser) {
     // Redirect to appropriate login page based on the current path
     if (location.pathname.startsWith('/admin')) {
-      return <Navigate to="/admin/login" state={{ from: location }} replace />;
+      return <Navigate to="/admin" state={{ from: location }} replace />;
     }
     if (location.pathname.startsWith('/broker')) {
-      return <Navigate to="/broker/login" state={{ from: location }} replace />;
+      return <Navigate to="/broker" state={{ from: location }} replace />;
     }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (allowedRoles && (!userData || !allowedRoles.includes(userData.role))) {
     // Role not authorized, redirect to home or dashboard based on role
-    if (userData?.role === 'admin') return <Navigate to="/admin" replace />;
-    if (userData?.role === 'broker') return <Navigate to="/broker" replace />;
+    if (userData?.role === 'admin') return <Navigate to="/admin/dashboard" replace />;
+    if (userData?.role === 'broker') return <Navigate to="/broker/dashboard" replace />;
     return <Navigate to="/" replace />;
   }
 

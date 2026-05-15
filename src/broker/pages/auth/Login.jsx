@@ -12,7 +12,7 @@ const BrokerLogin = () => {
   const { login, userData } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/broker";
+  const from = location.state?.from?.pathname || "/broker/dashboard";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
