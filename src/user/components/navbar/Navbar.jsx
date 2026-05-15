@@ -117,10 +117,10 @@ const Navbar = () => {
                       </div>
                       
                       {userData?.role === 'admin' && (
-                        <Link to="/admin" className="block px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#F7F7F5]">Admin Dashboard</Link>
+                        <Link to="/admin/dashboard" className="block px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#F7F7F5]">Admin Dashboard</Link>
                       )}
                       {userData?.role === 'broker' && (
-                        <Link to="/broker" className="block px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#F7F7F5]">Broker Dashboard</Link>
+                        <Link to="/broker/dashboard" className="block px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-[#111111] hover:bg-[#F7F7F5]">Broker Dashboard</Link>
                       )}
                       
                       <button 
@@ -182,10 +182,10 @@ const Navbar = () => {
                     <p className="text-xs text-[#666666]">{userData?.role}</p>
                   </div>
                   {userData?.role === 'admin' && (
-                    <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Admin Dashboard</Link>
+                    <Link to="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Admin Dashboard</Link>
                   )}
                   {userData?.role === 'broker' && (
-                    <Link to="/broker" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Broker Dashboard</Link>
+                    <Link to="/broker/dashboard" onClick={() => setMobileMenuOpen(false)} className="text-sm font-bold uppercase tracking-widest text-[#111111]">Broker Dashboard</Link>
                   )}
                   <button 
                     onClick={handleLogout}

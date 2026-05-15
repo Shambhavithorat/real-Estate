@@ -38,21 +38,21 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] flex items-center justify-center px-4 py-24 fade-in">
-      <div className="w-full max-w-lg space-y-12">
-        <div className="text-center space-y-4">
-          <div className="inline-flex w-16 h-16 bg-[#6B705C] rounded-2xl items-center justify-center text-white mb-4 shadow-xl">
+    <div className="min-h-screen bg-[#111111] flex items-center justify-center px-4 fade-in font-sans">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center space-y-5">
+          <div className="inline-flex w-16 h-16 bg-white rounded-3xl items-center justify-center text-[#111111] mb-2 shadow-lg">
              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
              </svg>
           </div>
-          <h1 className="text-4xl font-bold text-[#111111] tracking-tight">Member Access</h1>
-          <p className="text-[#666666] font-medium tracking-[0.3em] text-[10px] uppercase">A Private Collection of Premier Residences</p>
+          <h1 className="text-3xl font-bold text-white tracking-[0.1em]">MEMBER TERMINAL</h1>
+          <p className="text-[#888888] font-bold tracking-[0.3em] text-[9px] uppercase">Secure Access Protocol</p>
         </div>
 
-        <div className="card-premium p-12 space-y-8 bg-white shadow-2xl relative overflow-hidden border border-white">
+        <div className="p-10 space-y-8 bg-[#18181b] rounded-[2rem] border border-[#27272a] shadow-2xl relative overflow-hidden">
           {error && (
-            <div className="p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-[11px] font-bold uppercase tracking-wider flex items-center gap-3">
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-[11px] font-bold uppercase tracking-wider flex items-center gap-3">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -60,32 +60,32 @@ const Login = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-3">
-               <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#666666]">Identity / Email</label>
+               <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#888888]">Member ID</label>
                <input 
                  type="email" 
                  required
                  value={email}
                  onChange={(e) => setEmail(e.target.value)}
                  placeholder="your@email.com" 
-                 className="input-premium py-5" 
+                 className="w-full bg-[#f0f4ff] text-[#111111] px-5 py-4 rounded-xl outline-none focus:ring-2 focus:ring-white transition-all text-sm font-medium"
                />
             </div>
             <div className="space-y-3 relative">
-               <label className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#666666]">Security / Password</label>
+               <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#888888]">Access Key</label>
                <input 
                  type={showPassword ? "text" : "password"} 
                  required
                  value={password}
                  onChange={(e) => setPassword(e.target.value)}
                  placeholder="••••••••" 
-                 className="input-premium py-5" 
+                 className="w-full bg-[#f0f4ff] text-[#111111] px-5 py-4 rounded-xl outline-none focus:ring-2 focus:ring-white transition-all text-sm font-medium"
                />
                <button 
                  type="button"
                  onClick={() => setShowPassword(!showPassword)}
-                 className="absolute right-5 top-[42px] text-[#666666] hover:text-[#111111]"
+                 className="absolute right-5 top-[38px] text-[#666666] hover:text-[#111111]"
                >
                  {showPassword ? (
                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,26 +102,27 @@ const Login = () => {
             
             <button 
               disabled={loading}
-              className="w-full btn-premium py-5 shadow-2xl shadow-[#6B705C]/30 flex items-center justify-center gap-3 group"
+              className="w-full bg-white hover:bg-gray-100 text-[#111111] text-xs font-bold uppercase tracking-[0.2em] py-4 rounded-xl transition-colors flex items-center justify-center mt-2"
             >
               {loading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-[#111111] border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <>
-                  Sign In to Collection
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </>
+                'Initiate Session'
               )}
             </button>
           </form>
           
-          <div className="pt-8 border-t border-[#E5E5E5] text-center">
-             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#666666]">
-               New to URBN? <Link to="/signup" className="text-[#6B705C] hover:underline">Request Invitation</Link>
+          <div className="pt-6 text-center">
+             <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#666666]">
+               New user? <Link to="/signup" className="text-white hover:underline ml-1">Create Account</Link>
              </p>
           </div>
+        </div>
+
+        <div className="text-center pt-2">
+            <p className="text-[#444444] font-bold tracking-[0.15em] text-[8px] uppercase">
+                Unauthorized Access Is Strictly Prohibited
+            </p>
         </div>
       </div>
     </div>
