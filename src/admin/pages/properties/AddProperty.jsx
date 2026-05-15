@@ -10,7 +10,7 @@ const AddProperty = () => {
         price: '',
         location: '',
         address: '',
-        type: 'Residential', // Default
+        type: 'Villa', // Updated default to one of the requirements
         category: 'Buy',
         bedrooms: '',
         bathrooms: '',
@@ -131,10 +131,9 @@ const AddProperty = () => {
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 rounded-lg border border-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#6B705C]/20 focus:border-[#6B705C]"
                             >
-                                <option value="Residential">Residential</option>
-                                <option value="Commercial">Commercial</option>
                                 <option value="Villa">Villa</option>
                                 <option value="Apartment">Apartment</option>
+                                <option value="Houses">Houses</option>
                                 <option value="Plot">Plot</option>
                             </select>
                         </div>

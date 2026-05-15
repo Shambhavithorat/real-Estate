@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
+import { useFilter } from '../../context/FilterContext';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { categoryFilter, setCategoryFilter } = useFilter();
   const { currentUser, userData, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -19,14 +21,40 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Buy', href: '/buy' },
-    { name: 'Rent', href: '/rent' },
-    { name: 'Inquiries', href: '/sell' },
+    { name: 'Home', href: '/', action: () => setCategoryFilter('All') },
+    { name: 'Villa', action: () => setCategoryFilter('Villa') },
+    { name: 'Apartment', action: () => setCategoryFilter('Apartment') },
+    { name: 'Houses', action: () => setCategoryFilter('Houses') },
+    { name: 'Plot', action: () => setCategoryFilter('Plot') },
     { name: 'Agents', href: '/agents' },
   ];
 
-  const isActive = (path) => location.pathname === path;
+  const handleLinkClick = (link) => {
+    if (link.href) {
+      navigate(link.href);
+    } else {
+      // If we are not on home, go home first then filter
+      if (location.pathname !== '/') {
+        navigate('/');
+      }
+    }
+    
+    if (link.action) {
+      link.action();
+    }
+    setMobileMenuOpen(false);
+  };
+
+  const isActive = (link) => {
+    if (link.href) return location.pathname === link.href;
+    if (location.pathname === '/') return categoryFilter === link.name;
+    return false;
+  };
+
+  const currentActiveTab = () => {
+    if (location.pathname !== '/') return '';
+    return categoryFilter;
+  };
 
   const handleLogout = async () => {
     try {
@@ -71,16 +99,16 @@ const Navbar = () => {
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center space-x-10">
               {navLinks.map((link) => (
-                <Link
+                <button
                   key={link.name}
-                  to={link.href}
-                  className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 group ${isActive(link.href) ? 'text-[#6B705C]' : 'text-[#666666] hover:text-[#111111]'
+                  onClick={() => handleLinkClick(link)}
+                  className={`relative text-xs font-bold uppercase tracking-widest transition-all duration-300 group ${isActive(link) ? 'text-[#6B705C]' : 'text-[#666666] hover:text-[#111111]'
                     }`}
                 >
                   {link.name}
-                  <span className={`absolute -bottom-1.5 left-0 h-[2px] bg-[#6B705C] transition-all duration-300 ${isActive(link.href) ? 'w-full' : 'w-0 group-hover:w-full'
+                  <span className={`absolute -bottom-1.5 left-0 h-[2px] bg-[#6B705C] transition-all duration-300 ${isActive(link) ? 'w-full' : 'w-0 group-hover:w-full'
                     }`} />
-                </Link>
+                </button>
               ))}
             </div>
 
@@ -170,9 +198,13 @@ const Navbar = () => {
               Search
             </button>
             {navLinks.map((link) => (
-              <Link key={link.name} to={link.href} className="block text-sm font-bold uppercase tracking-widest text-[#666666]">
+              <button
+                key={link.name}
+                onClick={() => handleLinkClick(link)}
+                className={`block w-full text-left text-sm font-bold uppercase tracking-widest ${isActive(link) ? 'text-[#6B705C]' : 'text-[#666666]'}`}
+              >
                 {link.name}
-              </Link>
+              </button>
             ))}
             <div className="pt-6 border-t border-[#E5E5E5] flex flex-col space-y-4">
               {currentUser ? (

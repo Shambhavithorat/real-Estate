@@ -90,10 +90,9 @@ const AddProperty = () => {
                       className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C] outline-none"
                     >
                        <option>Villa</option>
-                       <option>Penthouse</option>
-                       <option>Mansion</option>
                        <option>Apartment</option>
-                       <option>Office</option>
+                       <option>Houses</option>
+                       <option>Plot</option>
                     </select>
                  </div>
                  <div className="space-y-2 md:col-span-2">
