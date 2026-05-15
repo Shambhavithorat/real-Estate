@@ -9,18 +9,47 @@ const Buy = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const data = await propertyService.getApprovedProperties();
-        setProperties(data);
-      } catch (error) {
-        console.error("Error fetching properties for Buy page:", error);
-      } finally {
-        setLoading(false);
+  // Filter state
+  const [filters, setFilters] = useState({
+      city: '',
+      propertyType: '',
+      minPrice: '',
+      maxPrice: '',
+  });
+
+  const handleFilterChange = (key, value) => {
+      setFilters({ ...filters, [key]: value });
+  };
+
+  const clearFilters = () => {
+      setFilters({ city: '', propertyType: '', minPrice: '', maxPrice: '' });
+  };
+
+  // Safe client-side filter
+  const filteredProperties = properties.filter(p => {
+      if (filters.city && p.location?.city && !p.location.city.toLowerCase().includes(filters.city.toLowerCase()) && !p.location?.address?.toLowerCase().includes(filters.city.toLowerCase())) {
+          return false;
       }
-    };
-    fetchProperties();
+      if (filters.propertyType && filters.propertyType !== 'All Types' && p.propertyType !== filters.propertyType) {
+          return false;
+      }
+      if (filters.maxPrice && p.price > Number(filters.maxPrice)) {
+          return false;
+      }
+      if (filters.minPrice && p.price < Number(filters.minPrice)) {
+          return false;
+      }
+      return true;
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = propertyService.subscribeProperties((data) => {
+      // You can filter by approved here if needed: data.filter(p => p.status === 'approved')
+      setProperties(data);
+      setLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -34,7 +63,7 @@ const Buy = () => {
                Exclusive <span className="text-[#6B705C] italic font-medium">Collections</span>
              </h1>
              <p className="text-[#666666] font-medium uppercase tracking-widest text-xs">
-               {loading ? 'Fetching properties...' : `Showing 1–${properties.length} of ${properties.length} properties`}
+               {loading ? 'Fetching properties...' : `Showing 1–${filteredProperties.length} of ${filteredProperties.length} properties`}
              </p>
           </div>
           
@@ -78,7 +107,11 @@ const Buy = () => {
           
           {/* Filter Sidebar */}
           <aside className="w-full lg:w-80 flex-shrink-0">
-            <FilterSidebar />
+            <FilterSidebar 
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onReset={clearFilters}
+            />
           </aside>
 
           {/* Property Section */}
@@ -106,8 +139,8 @@ const Buy = () => {
                  Array.from({ length: 4 }).map((_, i) => (
                    <div key={i} className="h-[400px] bg-gray-200 animate-pulse rounded-3xl" />
                  ))
-               ) : properties.length > 0 ? (
-                 properties.map(property => (
+               ) : filteredProperties.length > 0 ? (
+                 filteredProperties.map(property => (
                    <PropertyCard key={property.id} property={property} />
                  ))
                ) : (
@@ -120,7 +153,7 @@ const Buy = () => {
             </div>
 
             {/* Pagination */}
-            {!loading && properties.length > 10 && (
+            {!loading && filteredProperties.length > 10 && (
               <div className="flex justify-center items-center gap-4 pt-12">
                  <button className="w-12 h-12 rounded-xl border border-[#E5E5E5] flex items-center justify-center text-[#666666] hover:border-[#6B705C] hover:text-[#6B705C] transition-all">
                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,7 +193,11 @@ const Buy = () => {
                   </button>
                </div>
                <div className="flex-1 overflow-y-auto no-scrollbar p-2">
-                  <FilterSidebar onReset={() => setIsFilterOpen(false)} />
+                  <FilterSidebar 
+                    filters={filters}
+                    onFilterChange={handleFilterChange}
+                    onReset={clearFilters}
+                  />
                </div>
             </div>
          </div>

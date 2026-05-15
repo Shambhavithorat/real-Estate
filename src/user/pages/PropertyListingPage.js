@@ -30,6 +30,30 @@ const PropertyListingPage = () => {
         maxPrice: searchParams.get('maxPrice') || '',
     });
 
+    const filteredProperties = properties.filter(property => {
+        let match = true;
+        
+        // Location search (case-insensitive)
+        if (filters.city && property.location) {
+            match = match && property.location.toLowerCase().includes(filters.city.toLowerCase());
+        }
+
+        // Property Type
+        if (filters.propertyType && property.propertyType) {
+            match = match && property.propertyType === filters.propertyType;
+        }
+
+        // Price
+        if (filters.minPrice) {
+            match = match && property.price >= parseInt(filters.minPrice);
+        }
+        if (filters.maxPrice) {
+            match = match && property.price <= parseInt(filters.maxPrice);
+        }
+
+        return match;
+    });
+
     // Real-time Fetch from Firestore
     useEffect(() => {
         setLoading(true);
@@ -87,7 +111,7 @@ const PropertyListingPage = () => {
                                 Premium Collection
                             </h1>
                             <p className="text-[#666666] text-sm font-medium">
-                                Showing <span className="text-[#111111] font-bold">{pagination.totalProperties}</span> properties live from Firestore
+                                Showing <span className="text-[#111111] font-bold">{filteredProperties.length}</span> properties live from Firestore
                             </p>
                         </div>
                     </div>
@@ -99,9 +123,9 @@ const PropertyListingPage = () => {
                                 <div key={n} className="h-[450px] bg-gray-100 rounded-3xl animate-pulse" />
                             ))}
                         </div>
-                    ) : properties.length > 0 ? (
+                    ) : filteredProperties.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                            {properties.map((property) => (
+                            {filteredProperties.map((property) => (
                                 <PropertyCard key={property.id} property={property} />
                             ))}
                         </div>

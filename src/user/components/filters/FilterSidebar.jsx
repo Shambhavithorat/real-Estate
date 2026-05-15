@@ -26,7 +26,7 @@ const FilterSection = ({ title, children, defaultOpen = true }) => {
   );
 };
 
-const FilterSidebar = ({ onFilterChange, onReset }) => {
+const FilterSidebar = ({ filters = {}, onFilterChange, onReset }) => {
   return (
     <div className="card-premium p-6 space-y-2 bg-white sticky top-[90px] max-h-[calc(100vh-120px)] overflow-y-auto no-scrollbar shadow-xl border-[#E5E5E5]">
       <div className="flex justify-between items-center border-b border-[#E5E5E5] pb-4 mb-2">
@@ -51,6 +51,8 @@ const FilterSidebar = ({ onFilterChange, onReset }) => {
           <input
             type="text"
             placeholder="Search location..."
+            value={filters.city || ''}
+            onChange={(e) => onFilterChange && onFilterChange('city', e.target.value)}
             className="w-full bg-[#F7F7F5] border-none pl-9 pr-4 py-2.5 rounded-xl text-[11px] focus:ring-1 focus:ring-[#6B705C]"
           />
         </div>
@@ -58,30 +60,43 @@ const FilterSidebar = ({ onFilterChange, onReset }) => {
 
       {/* 🏠 Property Type */}
       <FilterSection title="Property Type">
-        <Dropdown
-          label="Type"
-          value="All Types"
-          options={['All Types', 'Villa', 'Apartment', 'Penthouse', 'Townhouse', 'Land']}
-          onChange={() => { }}
-        />
+        <select
+          value={filters.propertyType || ''}
+          onChange={(e) => onFilterChange && onFilterChange('propertyType', e.target.value)}
+          className="w-full bg-[#F7F7F5] border-none px-4 py-2.5 rounded-xl text-[11px] focus:ring-1 focus:ring-[#6B705C]"
+        >
+          <option value="">All Types</option>
+          <option value="Villa">Villa</option>
+          <option value="Apartment">Apartment</option>
+          <option value="Penthouse">Penthouse</option>
+          <option value="Townhouse">Townhouse</option>
+          <option value="Plot">Plot</option>
+          <option value="Commercial">Commercial</option>
+        </select>
       </FilterSection>
 
       {/* 💰 Price Range */}
       <FilterSection title="Price Range">
         <div className="space-y-4">
           <div className="flex justify-between text-[10px] font-bold text-[#111111]">
-            <span>₹ 0</span>
-            <span>₹ 5,00,00,000+</span>
+            <span>₹ {filters.minPrice || '0'}</span>
+            <span>₹ {filters.maxPrice || 'Any'}</span>
           </div>
-          <div className="relative h-1.5 bg-[#F7F7F5] rounded-full">
-            <div className="absolute inset-y-0 left-0 right-1/4 bg-[#6B705C] rounded-full" />
-            <div className="absolute top-1/2 left-0 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#6B705C] rounded-full shadow-md cursor-pointer" />
-            <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#6B705C] rounded-full shadow-md cursor-pointer" />
-          </div>
-          <div className="grid grid-cols-3 gap-1">
-            {['₹ 0 - 50 L', '₹ 50 L - 1 Cr', '₹ 1 Cr+'].map(v => (
-              <button key={v} className="py-1.5 rounded-md border border-[#E5E5E5] text-[8px] font-bold text-[#666666] hover:border-[#6B705C]">{v}</button>
-            ))}
+          <div className="flex gap-2">
+            <input 
+              type="number" 
+              placeholder="Min Price" 
+              value={filters.minPrice || ''}
+              onChange={(e) => onFilterChange && onFilterChange('minPrice', e.target.value)}
+              className="w-1/2 bg-[#F7F7F5] border-none px-3 py-2 rounded-lg text-[11px]" 
+            />
+            <input 
+              type="number" 
+              placeholder="Max Price" 
+              value={filters.maxPrice || ''}
+              onChange={(e) => onFilterChange && onFilterChange('maxPrice', e.target.value)}
+              className="w-1/2 bg-[#F7F7F5] border-none px-3 py-2 rounded-lg text-[11px]" 
+            />
           </div>
         </div>
       </FilterSection>

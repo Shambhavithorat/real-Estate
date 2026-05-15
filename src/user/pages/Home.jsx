@@ -2,16 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import Hero from '../components/hero/Hero';
 import PropertyCard from '../components/property/PropertyCard';
-import FilterSidebar from '../components/filters/FilterSidebar';
 import SkeletonCard from '../components/common/SkeletonCard';
 import Dropdown from '../components/common/Dropdown';
 import { propertyService } from '../services/propertyService';
+import { useFilter } from '../context/FilterContext';
 
 const Home = () => {
+  const { categoryFilter } = useFilter();
   const location = useLocation();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState('Newest');
   const [currentPage, setCurrentPage] = useState(1);
   const mainRef = useRef(null);
@@ -19,6 +19,7 @@ const Home = () => {
   const [filters, setFilters] = useState({
     location: '',
     type: 'All Types',
+    listingType: 'All', // Added for Requirement 3
     priceRange: 'Any',
     bedrooms: 'Any',
     bathrooms: 'Any',
@@ -43,21 +44,39 @@ const Home = () => {
     return () => unsubscribe();
   }, [location.search]);
 
+  // Requirement 1 & 6: Dynamic handling without page reload
+  const handleSearchSubmit = (searchFilters) => {
+    setFilters(prev => ({ ...prev, ...searchFilters }));
+    // Smooth scroll to property section
+    mainRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handleFilterChange = (newFilters) => {
-    setLoading(true);
+    setFilters(newFilters);
     setCurrentPage(1);
-    setTimeout(() => {
-      setFilters(newFilters);
-      setLoading(false);
-    }, 400);
   };
 
   const filteredProperties = properties.filter(property => {
-    const propertyLocation = property.location || property.city || "";
-    const matchesLocation = propertyLocation.toLowerCase().includes((filters.location || "").toLowerCase());
+    // Requirement 4: Case-insensitive search
+    const propertyLocation = (property.location || property.city || property.address || "").toLowerCase();
+    const searchLocation = (filters.location || "").toLowerCase();
+    const matchesLocation = propertyLocation.includes(searchLocation);
     
+    // Requirement 3: Property Type filter
     const propertyType = property.type || property.propertyType || "";
-    const matchesType = filters.type === 'All Types' || propertyType === filters.type;
+    let matchesType = filters.type === 'All Types' || propertyType === filters.type;
+
+    // Integrated Category Filter from Navbar
+    if (categoryFilter !== 'All') {
+      matchesType = propertyType === categoryFilter;
+    }
+
+    // Requirement 3: Listing Type filter (Rent/Sell)
+    const listingType = property.listingType || property.status === 'rent' ? 'Rent' : 'Sell'; 
+    const matchesListingType = filters.listingType === 'All' || 
+                               property.listingType === filters.listingType || 
+                               (filters.listingType === 'Rent' && property.status === 'rent') ||
+                               (filters.listingType === 'Sell' && property.status === 'sale');
 
     let matchesPrice = true;
     if (filters.priceRange !== 'Any') {
@@ -70,7 +89,7 @@ const Home = () => {
 
     let matchesBHK = true;
     if (filters.bedrooms !== 'Any') {
-      const bhk = property.beds;
+      const bhk = property.beds || property.bedrooms;
       if (filters.bedrooms === '1 BHK') matchesBHK = bhk === 1;
       else if (filters.bedrooms === '2 BHK') matchesBHK = bhk === 2;
       else if (filters.bedrooms === '3 BHK') matchesBHK = bhk === 3;
@@ -78,7 +97,7 @@ const Home = () => {
       else if (filters.bedrooms === '4+ BHK') matchesBHK = bhk >= 4;
     }
 
-    return matchesLocation && matchesType && matchesPrice && matchesBHK;
+    return matchesLocation && matchesType && matchesListingType && matchesPrice && matchesBHK;
   });
 
   // Apply Sorting
@@ -109,31 +128,24 @@ const Home = () => {
 
   return (
     <div className="bg-[#F7F7F5] min-h-screen fade-in">
-      <Hero />
+      <Hero onSearch={handleSearchSubmit} />
 
       <div className="max-w-full mx-auto px-6 md:px-12 lg:px-16 py-12 md:py-16">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-14">
-
-          {/* Desktop Filter Sidebar */}
-          <aside className="hidden lg:block w-80 flex-shrink-0">
-            <FilterSidebar onFilterChange={handleFilterChange} onReset={() => setFilters({})} />
-          </aside>
+        <div className="flex flex-col gap-10">
 
           {/* Main Content */}
-          <main className="flex-1 min-h-[800px]" ref={mainRef}>
+          <main className="w-full min-h-[800px]" ref={mainRef}>
 
             {/* Sticky Wrapper */}
-            <div className="sticky top-[70px] z-30 bg-[#F7F7F5] pt-4 pb-6">
+            <div className="bg-[#F7F7F5] pb-6">
               <div className="flex justify-between items-center bg-white p-4 md:p-6 rounded-2xl border border-[#E5E5E5] shadow-md">
                 <p className="text-xs font-bold uppercase tracking-widest text-[#666666]">
-                  Showing {loading ? '...' : paginatedProperties.length > 0 ? `${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, sortedProperties.length)}` : '0'} of {sortedProperties.length} properties
+                  {sortedProperties.length > 0 ? (
+                    <>Showing {loading ? '...' : `${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, sortedProperties.length)}`} of {sortedProperties.length} properties</>
+                  ) : (
+                    <>No Properties Found</>
+                  )}
                 </p>
-                <button
-                  onClick={() => setIsFilterOpen(true)}
-                  className="lg:hidden btn-premium !py-2 !px-4 text-[10px]"
-                >
-                  Filters
-                </button>
                 <Dropdown
                   label="Sort by"
                   value={sortBy}
@@ -144,7 +156,7 @@ const Home = () => {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {loading ? (
                 Array.from({ length: 9 }).map((_, i) => <SkeletonCard key={i} />)
               ) : paginatedProperties.length > 0 ? (
@@ -152,16 +164,24 @@ const Home = () => {
                   <PropertyCard key={property.id} property={property} />
                 ))
               ) : (
-                <div className="col-span-full py-20 text-center space-y-4">
-                  <div className="text-4xl">🏙️</div>
-                  <h3 className="text-xl font-bold text-[#111111]">No Properties Found</h3>
-                  <p className="text-[#666666] text-sm">Try adjusting your filters to find more properties.</p>
-                  <button
-                    onClick={() => handleFilterChange({ location: '', type: 'All Types', priceRange: 'Any', bedrooms: 'Any', bathrooms: 'Any', furnishing: 'Any' })}
-                    className="text-[#6B705C] font-bold text-xs uppercase tracking-widest hover:underline"
-                  >
-                    Clear All Filters
-                  </button>
+                <div className="col-span-full py-32 flex flex-col items-center justify-center text-center space-y-6">
+                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-sm border border-[#E5E5E5]">
+                    <svg className="w-10 h-10 text-[#6B705C]/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-[#111111] tracking-tight">No Properties Found</h3>
+                    <p className="text-[#666666] mt-2 text-sm max-w-xs mx-auto">
+                      We couldn't find any properties matching your search criteria. Try adjusting your filters.
+                    </p>
+                    <button 
+                      onClick={() => setFilters({ ...filters, location: '', type: 'All Types', listingType: 'All' })}
+                      className="mt-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#6B705C] hover:underline"
+                    >
+                      Clear All Filters
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -207,27 +227,6 @@ const Home = () => {
 
         </div>
       </div>
-
-      {/* Mobile Filter Drawer */}
-      {isFilterOpen && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setIsFilterOpen(false)} />
-          <div className="absolute right-0 top-0 bottom-0 w-[300px] bg-white shadow-2xl p-6 overflow-y-auto no-scrollbar animate-[slideInRight_0.3s_ease-out]">
-            <div className="flex justify-between items-center mb-8 border-b border-[#E5E5E5] pb-4">
-              <h3 className="text-xl font-bold text-[#111111]">Filters</h3>
-              <button onClick={() => setIsFilterOpen(false)} className="text-[#666666]">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <FilterSidebar
-              onFilterChange={(f) => { handleFilterChange(f); setIsFilterOpen(false); }}
-              onReset={() => { setFilters({}); setIsFilterOpen(false); }}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

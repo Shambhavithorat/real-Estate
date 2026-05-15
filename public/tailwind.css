@@ -802,10 +802,6 @@ h1, h2, h3, h4, h5, h6 {
   right: 0.375rem;
 }
 
-.right-1\/4 {
-  right: 25%;
-}
-
 .right-2 {
   right: 0.5rem;
 }
@@ -1255,8 +1251,8 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 400px;
 }
 
-.min-h-\[500px\] {
-  min-height: 500px;
+.min-h-\[600px\] {
+  min-height: 600px;
 }
 
 .min-h-\[60vh\] {
@@ -1365,10 +1361,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .w-8 {
   width: 2rem;
-}
-
-.w-80 {
-  width: 20rem;
 }
 
 .w-9 {
@@ -1547,10 +1539,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-\[fadeIn_0\.3s_ease-out\] {
   animation: fadeIn 0.3s ease-out;
-}
-
-.animate-\[slideInRight_0\.3s_ease-out\] {
-  animation: slideInRight 0.3s ease-out;
 }
 
 @keyframes pulse {
@@ -2537,16 +2525,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 2rem;
 }
 
-.\!px-4 {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-}
-
-.\!py-2 {
-  padding-top: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
-}
-
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -3460,6 +3438,10 @@ h1, h2, h3, h4, h5, h6 {
   color: rgb(102 102 102 / 0.4);
 }
 
+.placeholder\:text-\[\#666666\]\/50::placeholder {
+  color: rgb(102 102 102 / 0.5);
+}
+
 .placeholder\:text-white\/20::placeholder {
   color: rgb(255 255 255 / 0.2);
 }
@@ -3988,6 +3970,10 @@ h1, h2, h3, h4, h5, h6 {
     width: 20rem;
   }
 
+  .md\:w-auto {
+    width: auto;
+  }
+
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -4010,18 +3996,6 @@ h1, h2, h3, h4, h5, h6 {
 
   .md\:gap-6 {
     gap: 1.5rem;
-  }
-
-  .md\:space-y-10 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-y-reverse: 0;
-    margin-top: calc(2.5rem * calc(1 - var(--tw-space-y-reverse)));
-    margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
-  }
-
-  .md\:space-y-5 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-y-reverse: 0;
-    margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
-    margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
   }
 
   .md\:p-10 {
@@ -4100,10 +4074,6 @@ h1, h2, h3, h4, h5, h6 {
   .md\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
-  }
-
-  .md\:leading-\[1\.1\] {
-    line-height: 1.1;
   }
 }
 
@@ -4195,10 +4165,6 @@ h1, h2, h3, h4, h5, h6 {
 
   .lg\:gap-12 {
     gap: 3rem;
-  }
-
-  .lg\:gap-14 {
-    gap: 3.5rem;
   }
 
   .lg\:gap-6 {
