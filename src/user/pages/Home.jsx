@@ -134,7 +134,7 @@ const Home = () => {
         <div className="flex flex-col gap-10">
 
           {/* Main Content */}
-          <main className="w-full min-h-[800px]" ref={mainRef}>
+          <main id="featured-properties" className="w-full min-h-[800px]" ref={mainRef}>
 
             {/* Sticky Wrapper */}
             <div className="bg-[#F7F7F5] pb-6">

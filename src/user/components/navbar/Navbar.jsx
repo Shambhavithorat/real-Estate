@@ -26,7 +26,6 @@ const Navbar = () => {
     { name: 'Apartment', action: () => setCategoryFilter('Apartment') },
     { name: 'Houses', action: () => setCategoryFilter('Houses') },
     { name: 'Plot', action: () => setCategoryFilter('Plot') },
-    { name: 'Agents', href: '/agents' },
   ];
 
   const handleLinkClick = (link) => {
@@ -37,6 +36,14 @@ const Navbar = () => {
       if (location.pathname !== '/') {
         navigate('/');
       }
+      
+      // Add a small delay for navigation to complete before scrolling
+      setTimeout(() => {
+        const propertiesSection = document.getElementById('featured-properties');
+        if (propertiesSection) {
+          propertiesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
     
     if (link.action) {
@@ -46,6 +53,9 @@ const Navbar = () => {
   };
 
   const isActive = (link) => {
+    if (link.href === '/') {
+      return location.pathname === '/' && categoryFilter === 'All';
+    }
     if (link.href) return location.pathname === link.href;
     if (location.pathname === '/') return categoryFilter === link.name;
     return false;
@@ -91,8 +101,8 @@ const Navbar = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
               </div>
-              <span className="text-xl font-bold tracking-[0.3em] text-[#111111]">
-                URBN
+              <span className="text-xl font-bold tracking-[0.1em] text-[#111111]">
+                PropertyVishva
               </span>
             </Link>
 
@@ -246,7 +256,7 @@ const Navbar = () => {
         <div className={`absolute top-0 left-0 right-0 p-12 transition-all duration-700 transform ${isSearchOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-between items-center mb-12">
-              <span className="text-white text-2xl font-bold tracking-[0.3em]">URBN SEARCH</span>
+              <span className="text-white text-2xl font-bold tracking-[0.1em]">PropertyVishva SEARCH</span>
               <button onClick={() => setIsSearchOpen(false)} className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-[#111111] transition-all">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

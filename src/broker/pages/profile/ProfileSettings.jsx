@@ -22,7 +22,7 @@ const ProfileSettings = () => {
             </div>
             <div className="space-y-2">
                <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Email Address</label>
-               <input type="email" defaultValue="julianne.davis@urbn.com" className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C]" />
+               <input type="email" defaultValue="julianne.davis@propertyvishva.com" className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C]" />
             </div>
             <div className="space-y-2">
                <label className="text-[10px] font-bold uppercase tracking-widest text-[#666666]">Bio</label>

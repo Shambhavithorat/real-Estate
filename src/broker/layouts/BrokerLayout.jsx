@@ -4,7 +4,7 @@ import Navbar from '../components/navbar/Navbar';
 import { Outlet } from 'react-router-dom';
 
 const BrokerLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024);
   
   return (
     <div className="flex h-screen bg-[#F7F7F5] overflow-hidden font-sans text-[#111111]">

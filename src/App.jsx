@@ -11,12 +11,9 @@ import UserProtectedRoute from './routes/UserProtectedRoute';
 import Home from './user/pages/Home';
 import Buy from './user/pages/Buy';
 import Rent from './user/pages/Rent';
-import Sell from './user/pages/Sell';
 import PropertyDetailsPage from './user/pages/PropertyDetailsPage';
 import Login from './user/pages/Login';
 import Signup from './user/pages/Signup';
-import Agents from './user/pages/Agents';
-import AgentProfile from './user/pages/AgentProfile';
 import UserLayout from './user/layouts/UserLayout';
 import ScrollToTop from './user/components/common/ScrollToTop';
 
@@ -27,12 +24,10 @@ import AdminLogin from './admin/pages/auth/Login';
 import AllProperties from './admin/pages/properties/AllProperties';
 import AllUsers from './admin/pages/users/AllUsers';
 import AllBrokers from './admin/pages/brokers/AllBrokers';
-import AllAgents from './admin/pages/agents/AllAgents';
 import Inquiries from './admin/pages/inquiries/Inquiries';
 import VisitRequests from './admin/pages/bookings/VisitRequests';
 import Settings from './admin/pages/settings/Settings';
 import AdminRequests from './admin/pages/requests/Requests';
-import AddBroker from './admin/pages/brokers/AddBroker';
 
 // Broker Imports
 import BrokerLayout from './broker/layouts/BrokerLayout';
@@ -69,9 +64,7 @@ function App() {
             <Route path="properties" element={<AllProperties />} />
             <Route path="users" element={<AllUsers />} />
             <Route path="brokers" element={<AllBrokers />} />
-            <Route path="add-broker" element={<AddBroker />} />
             <Route path="requests" element={<AdminRequests />} />
-            <Route path="agents" element={<AllAgents />} />
             <Route path="inquiries" element={<Inquiries />} />
             <Route path="visits" element={<VisitRequests />} />
             <Route path="settings" element={<Settings />} />
@@ -101,9 +94,6 @@ function App() {
             <Route index element={<Home />} />
             <Route path="buy" element={<Buy />} />
             <Route path="rent" element={<Rent />} />
-            <Route path="sell" element={<Sell />} />
-            <Route path="agents" element={<Agents />} />
-            <Route path="agents/:id" element={<AgentProfile />} />
             <Route path="properties/:id" element={<PropertyDetailsPage />} />
           </Route>
 

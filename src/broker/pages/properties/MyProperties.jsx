@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MyProperties = () => {
+  const navigate = useNavigate();
   const properties = [
     { id: 1, img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=100&q=80', title: 'The Glass House', location: 'Malibu, CA', price: '$8,500,000', views: 1240, status: 'Active' },
     { id: 2, img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=100&q=80', title: 'Skyline Penthouse', location: 'New York, NY', price: '$12,400,000', views: 3450, status: 'Active' },
@@ -14,7 +16,10 @@ const MyProperties = () => {
           <h1 className="text-2xl font-bold text-[#111111]">My Properties</h1>
           <p className="text-sm text-[#666666] mt-1">Manage your exclusive listings</p>
         </div>
-        <button className="btn-premium py-3 px-6 text-xs flex items-center gap-2 rounded-xl">
+        <button 
+          onClick={() => navigate('/broker/dashboard/add-property')}
+          className="btn-premium py-3 px-6 text-xs flex items-center gap-2 rounded-xl hover:scale-105 transition-transform"
+        >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>

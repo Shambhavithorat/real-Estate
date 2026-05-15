@@ -76,7 +76,7 @@ const AdminLogin = () => {
                  value={email}
                  onChange={(e) => setEmail(e.target.value)}
                  className="w-full bg-white/5 border border-white/10 px-6 py-5 rounded-2xl text-white text-sm focus:outline-none focus:ring-1 focus:ring-white/30 transition-all placeholder:text-white/20"
-                 placeholder="admin@urbn.system"
+                 placeholder="admin@propertyvishva.com"
                />
             </div>
             <div className="space-y-3">

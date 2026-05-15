@@ -13,7 +13,7 @@ export const agents = [
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80',
     bio: 'Rajesh is a seasoned expert in Pune\'s luxury real estate market, specializing in high-end villas in Baner and Kharadi.',
     phone: '+91 98765 43210',
-    email: 'rajesh@urbn.com',
+    email: 'rajesh@propertyvishva.com',
     socials: { linkedin: '#', twitter: '#', instagram: '#' }
   },
   {
@@ -30,7 +30,7 @@ export const agents = [
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
     bio: 'Priya has an unmatched portfolio of luxury penthouses in South Mumbai and Bandra.',
     phone: '+91 98765 43211',
-    email: 'priya@urbn.com',
+    email: 'priya@propertyvishva.com',
     socials: { linkedin: '#', twitter: '#', instagram: '#' }
   },
   {
@@ -47,7 +47,7 @@ export const agents = [
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80',
     bio: 'Amit is the go-to advisor for sprawling estates and premium residences in Nagpur.',
     phone: '+91 98765 43212',
-    email: 'amit@urbn.com',
+    email: 'amit@propertyvishva.com',
     socials: { linkedin: '#', twitter: '#', instagram: '#' }
   },
   {
@@ -64,7 +64,7 @@ export const agents = [
     image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80',
     bio: 'Sneha specializes in modern, tech-enabled apartments in Nashik\'s booming residential hubs.',
     phone: '+91 98765 43213',
-    email: 'sneha@urbn.com',
+    email: 'sneha@propertyvishva.com',
     socials: { linkedin: '#', twitter: '#', instagram: '#' }
   },
   {
@@ -81,7 +81,7 @@ export const agents = [
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
     bio: 'Vikram curates the finest heritage homes and royal estates in Kolhapur.',
     phone: '+91 98765 43214',
-    email: 'vikram@urbn.com',
+    email: 'vikram@propertyvishva.com',
     socials: { linkedin: '#', twitter: '#', instagram: '#' }
   },
   {
@@ -98,7 +98,7 @@ export const agents = [
     image: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=800&q=80',
     bio: 'Anjali specializes in upscale townhouses and gated communities in Solapur.',
     phone: '+91 98765 43215',
-    email: 'anjali@urbn.com',
+    email: 'anjali@propertyvishva.com',
     socials: { linkedin: '#', twitter: '#', instagram: '#' }
   }
 ];

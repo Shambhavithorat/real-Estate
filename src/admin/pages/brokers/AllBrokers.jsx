@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { userService } from '../../../user/services/userService';
-import { Link } from 'react-router-dom';
+import { db } from '../../../shared/firebase/firebaseConfig';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, getAuth, signOut } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../../../shared/firebase/firebaseConfig';
 
 const AllBrokers = () => {
   const [brokers, setBrokers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    brokerName: '',
+    email: '',
+    password: '',
+    phone: ''
+  });
+  const [formLoading, setFormLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
 
   useEffect(() => {
     const unsubscribe = userService.subscribeBrokers((data) => {
@@ -14,6 +29,51 @@ const AllBrokers = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddBrokerSubmit = async (e) => {
+    e.preventDefault();
+    setFormLoading(true);
+    setMessage({ type: '', text: '' });
+
+    const secondaryApp = initializeApp(firebaseConfig, 'Secondary');
+    const secondaryAuth = getAuth(secondaryApp);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        secondaryAuth,
+        formData.email,
+        formData.password
+      );
+      const uid = userCredential.user.uid;
+
+      await setDoc(doc(db, 'users', uid), {
+        displayName: formData.brokerName,
+        email: formData.email,
+        phone: formData.phone,
+        role: 'broker',
+        status: 'Active',
+        createdAt: serverTimestamp()
+      });
+
+      await signOut(secondaryAuth);
+      
+      setMessage({ type: 'success', text: 'Broker account created successfully!' });
+      setFormData({ brokerName: '', email: '', password: '', phone: '' });
+      setTimeout(() => {
+        setShowAddModal(false);
+        setMessage({ type: '', text: '' });
+      }, 2000);
+    } catch (error) {
+      console.error('Error creating broker:', error);
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setFormLoading(false);
+    }
+  };
 
   const handleStatusToggle = async (brokerId, currentStatus) => {
     const newStatus = currentStatus === 'Active' ? 'Suspended' : 'Active';
@@ -62,10 +122,105 @@ const AllBrokers = () => {
           <h1 className="text-5xl font-black text-[#111111] tracking-tighter">Registered <span className="text-[#6B705C] italic font-serif">Brokers</span></h1>
           <p className="text-sm text-[#666666] font-medium tracking-tight">Manage broker network and permissions</p>
         </div>
-        <Link to="/admin/add-broker" className="bg-[#111111] text-white py-4 px-8 text-xs font-bold uppercase tracking-[0.2em] rounded-[20px] hover:bg-[#6B705C] transition-all shadow-xl hover:-translate-y-1 flex items-center gap-3">
+        <button 
+          onClick={() => setShowAddModal(true)}
+          className="bg-[#111111] text-white py-4 px-8 text-xs font-bold uppercase tracking-[0.2em] rounded-[20px] hover:bg-[#6B705C] transition-all shadow-xl hover:-translate-y-1 flex items-center gap-3"
+        >
           <span>+</span> Add Broker
-        </Link>
+        </button>
       </div>
+
+      {/* Add Broker Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-[#111111]/40 backdrop-blur-sm" onClick={() => setShowAddModal(false)} />
+          <div className="relative bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in duration-300">
+            <div className="p-8 border-b border-[#F5F5F5] flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-black text-[#111111] tracking-tight">Create Broker Account</h2>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#6B705C] mt-1">Authorized Administrative Protocol</p>
+              </div>
+              <button onClick={() => setShowAddModal(false)} className="w-10 h-10 rounded-full bg-[#F7F7F5] flex items-center justify-center text-[#111111] hover:bg-[#E5E5E5] transition-all">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleAddBrokerSubmit} className="p-8 space-y-6">
+              {message.text && (
+                <div className={`p-4 rounded-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-3 ${
+                  message.type === 'success' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'
+                }`}>
+                  {message.text}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#666666] ml-1">Broker Full Name</label>
+                  <input 
+                    type="text" 
+                    name="brokerName"
+                    required
+                    value={formData.brokerName}
+                    onChange={handleChange}
+                    placeholder="John Doe"
+                    className="w-full bg-[#F7F7F5] border-none px-5 py-4 rounded-2xl text-sm focus:ring-1 focus:ring-[#6B705C] outline-none" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#666666] ml-1">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+91 9876543210"
+                    className="w-full bg-[#F7F7F5] border-none px-5 py-4 rounded-2xl text-sm focus:ring-1 focus:ring-[#6B705C] outline-none" 
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#666666] ml-1">Professional Email</label>
+                <input 
+                  type="email" 
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="broker@agency.com"
+                  className="w-full bg-[#F7F7F5] border-none px-5 py-4 rounded-2xl text-sm focus:ring-1 focus:ring-[#6B705C] outline-none" 
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#666666] ml-1">Initial Access Key</label>
+                <input 
+                  type="password" 
+                  name="password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="••••••••"
+                  className="w-full bg-[#F7F7F5] border-none px-5 py-4 rounded-2xl text-sm focus:ring-1 focus:ring-[#6B705C] outline-none" 
+                />
+              </div>
+
+              <div className="pt-4">
+                <button 
+                  disabled={formLoading}
+                  className="w-full bg-[#111111] text-white py-5 rounded-2xl text-[10px] font-bold uppercase tracking-[0.3em] hover:bg-[#6B705C] transition-all disabled:opacity-50"
+                >
+                  {formLoading ? 'Creating Account...' : 'Register New Broker'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="bg-white rounded-3xl border border-[#E5E5E5] overflow-hidden shadow-sm">
         <div className="p-5 border-b border-[#E5E5E5] bg-[#F7F7F5]/50">

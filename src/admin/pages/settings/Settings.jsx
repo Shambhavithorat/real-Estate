@@ -17,11 +17,11 @@ const Settings = () => {
          <div className="p-6 space-y-6">
             <div className="space-y-2">
                <label className="text-xs font-bold uppercase tracking-widest text-[#666666]">Platform Name</label>
-               <input type="text" defaultValue="URBN Real Estate" className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C]" />
+               <input type="text" defaultValue="PropertyVishva" className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C]" />
             </div>
             <div className="space-y-2">
                <label className="text-xs font-bold uppercase tracking-widest text-[#666666]">Contact Email</label>
-               <input type="email" defaultValue="admin@urbn.com" className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C]" />
+               <input type="email" defaultValue="admin@propertyvishva.com" className="w-full bg-[#F7F7F5] border-none px-4 py-3 rounded-xl text-sm focus:ring-1 focus:ring-[#6B705C]" />
             </div>
             <button className="btn-premium py-3 px-8 text-xs rounded-xl">Save Changes</button>
          </div>
