@@ -1,96 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { formatPrice } from '../../../shared/utils/formatPrice';
 
 const PropertyCard = ({ property }) => {
-  const statusConfig = {
-    available: { label: 'Available', color: 'bg-green-600' },
-    sold: { label: 'Sold', color: 'bg-red-600' },
-    pending: { label: 'Pending', color: 'bg-orange-500' },
-    rented: { label: 'Rented', color: 'bg-blue-600' },
-    'under-construction': { label: 'Under Construction', color: 'bg-yellow-500' },
-  };
-
-  const status = (property.status || 'available').toLowerCase();
-  const config = statusConfig[status] || statusConfig['available'];
-  const isSold = status === 'sold';
+  const isSold = (property.status || '').toLowerCase() === 'sold';
 
   return (
-    <div className={`card-premium group overflow-hidden bg-white transition-all duration-500 ${isSold ? 'opacity-75 grayscale-[0.3]' : ''}`}>
-      {/* Image Section */}
-      <div className="relative h-60 overflow-hidden">
+    <div className={`relative w-full h-[320px] rounded-[1rem] overflow-hidden group transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_0_2px_#C5A059,0_20px_40px_rgba(197,160,89,0.2)] ${isSold ? 'opacity-70 grayscale' : 'cursor-pointer'}`}>
+      {/* Top White Section for Image */}
+      <div className="absolute inset-0 bg-white h-[240px] p-4 flex justify-center items-center">
         <img 
-          src={property.image || 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80'} 
+          src={property.image || 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80'} 
           alt={property.title} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
         />
-        
-        {/* Status Badge (Top-Left) */}
-        <div className="absolute top-4 left-4">
-           <div className={`${config.color} text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2`}>
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              {config.label}
-           </div>
-        </div>
-
-        <div className="absolute top-4 right-4">
-          <button className="w-9 h-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-[#111111] hover:bg-[#6B705C] hover:text-white transition-all shadow-lg">
-            <svg className="w-4 h-4" fill={isSold ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-          </button>
-        </div>
-
-         <div className="absolute bottom-4 left-4">
-            <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[9px] font-bold uppercase tracking-widest text-[#111111] rounded-lg shadow-sm">
-              {property.propertyType || property.type || 'House'}
-            </span>
-         </div>
       </div>
 
-      {/* Info Section */}
-      <div className="p-6 space-y-4">
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <h3 className="text-sm font-bold text-[#111111] line-clamp-1 group-hover:text-[#6B705C] transition-colors">{property.title || 'Modern Minimalist Villa'}</h3>
-            <p className="text-[10px] text-[#666666] font-medium flex items-center gap-1">
-               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-               </svg>
-               {property.location || property.city || 'Pune, Maharashtra'}
-            </p>
-          </div>
-          <div className="text-right">
-             <p className="text-sm font-bold text-[#111111]">{formatPrice(property.price || 4250000)}</p>
-          </div>
-        </div>
+      {/* Bottom Dark Overlay Section */}
+      <div className="absolute bottom-0 left-0 right-0 h-[110px] bg-[#0A0A0A] rounded-[1rem] flex flex-col items-center justify-center border-t border-[#C5A059]/30 transition-all duration-300 group-hover:-translate-y-1">
+        
+        {/* Inner Gold Gradient Glow */}
+        <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-[#C5A059]/30 to-transparent rounded-t-[1rem] pointer-events-none" />
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-3 border-y border-[#F7F7F5] py-4">
-           <div className="text-center space-y-1">
-              <p className="text-xs font-bold text-[#111111]">{property.beds || 5}</p>
-              <p className="text-[8px] font-bold text-[#666666] uppercase tracking-widest">Beds</p>
-           </div>
-           <div className="text-center space-y-1 border-x border-[#F7F7F5]">
-              <p className="text-xs font-bold text-[#111111]">{property.baths || 4}</p>
-              <p className="text-[8px] font-bold text-[#666666] uppercase tracking-widest">Baths</p>
-           </div>
-           <div className="text-center space-y-1">
-              <p className="text-xs font-bold text-[#111111]">{property.sqft || property.area || '4,500'}</p>
-              <p className="text-[8px] font-bold text-[#666666] uppercase tracking-widest">Area</p>
-           </div>
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <h3 className="text-lg font-bold text-white mb-1.5 line-clamp-1 px-4">{property.title || '4BHK Homes'}</h3>
+          <p className="text-xs text-white/80 mb-3">Starting from {property.sqft || '1898'} sq. ft.</p>
+          <Link 
+            to={isSold ? '#' : `/properties/${property.id || 1}`}
+            className={`bg-white text-black text-[11px] font-bold px-6 py-1.5 rounded transition-colors shadow-sm ${isSold ? 'cursor-not-allowed text-gray-500' : 'hover:bg-[#C5A059] hover:text-white hover:shadow-md'}`}
+          >
+            {isSold ? 'Sold' : 'View Plan'}
+          </Link>
         </div>
-
-        <Link 
-          to={isSold ? '#' : `/properties/${property.id || 1}`}
-          className={`block w-full py-3.5 border-2 text-center text-[10px] font-bold uppercase tracking-[0.2em] rounded-xl transition-all duration-300 ${
-            isSold 
-              ? 'bg-[#E5E5E5] border-[#E5E5E5] text-[#666666] cursor-not-allowed' 
-              : 'border-[#111111] text-[#111111] hover:bg-[#111111] hover:text-white'
-          }`}
-        >
-          {isSold ? 'Property Sold' : 'View Details'}
-        </Link>
       </div>
     </div>
   );

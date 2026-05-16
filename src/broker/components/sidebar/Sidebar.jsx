@@ -29,36 +29,36 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <div className={`p-6 border-b border-[#E5E5E5] h-[72px] flex items-center ${isOpen ? 'justify-between' : 'justify-center'}`}>
           {isOpen && (
             <Link to="/broker/dashboard" className="flex items-center gap-3">
-               <div className="w-8 h-8 bg-[#6B705C] shrink-0 rounded-xl flex items-center justify-center text-white">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-               </div>
-               <span className="text-lg font-bold tracking-[0.2em] text-[#111111]">BROKER</span>
+              <div className="w-8 h-8 bg-[#6B705C] shrink-0 rounded-xl flex items-center justify-center text-white">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <span className="text-lg font-bold tracking-[0.2em] text-[#111111]">BROKER</span>
             </Link>
           )}
           <button onClick={() => setIsOpen(!isOpen)} className="text-[#111111] hover:text-[#6B705C] transition-colors">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               {isOpen ? (
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-               ) : (
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-               )}
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
         </div>
-        
+
         <div className={`flex-1 overflow-y-auto py-6 space-y-2 no-scrollbar ${isOpen ? 'px-4' : 'px-3'}`}>
           {navItems.map((item) => (
-            <NavLink 
-              key={item.name} 
+            <NavLink
+              key={item.name}
               to={item.path}
               end={item.exact}
               onClick={() => window.innerWidth < 1024 && setIsOpen(false)}
               className={({ isActive }) => `
                 flex items-center ${isOpen ? 'gap-3 px-5' : 'justify-center px-0'} py-4 rounded-2xl text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300
-                ${isActive 
-                  ? 'bg-[#111111] text-white shadow-[0_20px_40px_rgba(0,0,0,0.1)] scale-[1.02]' 
+                ${isActive
+                  ? 'bg-[#111111] text-white shadow-[0_20px_40px_rgba(0,0,0,0.1)] scale-[1.02]'
                   : 'text-[#666666] hover:bg-[#F7F7F5] hover:text-[#111111] hover:translate-x-1'}
               `}
               title={!isOpen ? item.name : undefined}
@@ -76,7 +76,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </NavLink>
           ))}
         </div>
-        
+
       </aside>
     </>
   );

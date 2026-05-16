@@ -8,30 +8,35 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          DEFAULT: '#002D52', // Deep Navy Blue
+          hover: '#001A33',
+        },
+        secondary: {
+          DEFAULT: '#0A422D', // Forest Emerald Green
         },
         accent: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          500: '#10b981',
-          600: '#059669',
+          DEFAULT: '#C5A059', // Champagne Gold
+          hover: '#A88746',
+        },
+        dark: {
+          bg: '#1A1A1A', // Charcoal for Footer
+          card: '#111111',
+          nav: 'rgba(26, 26, 26, 0.9)',
+        },
+        light: {
+          bg: '#F9F9F9', // Off-white for main body
+          card: '#FFFFFF',
+          text: '#333333', // Body Text
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
       },
       boxShadow: {
-        'card': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-        'card-hover': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+        'card': '0 4px 20px rgba(0, 0, 0, 0.05)',
+        'card-hover': '0 10px 30px rgba(0, 45, 82, 0.1)',
+        'glow': '0 0 20px rgba(197, 160, 89, 0.3)',
       }
     },
   },

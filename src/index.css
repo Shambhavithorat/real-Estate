@@ -1,6 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600;1,700;1,900&family=Montserrat:wght@400;600;700;800;900&family=Alex+Brush&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-color: #002d52;
+  --secondary-color: #0a422d;
+  --accent-color: #c5a059;
+  --bg-light: #f9f9f9;
+  --text-main: #333333;
+}
 
 @layer base {
   html {
@@ -9,25 +19,25 @@
   }
   
   body {
-    @apply bg-[#F7F7F5] text-[#111111] selection:bg-[#6B705C]/20;
+    @apply bg-[#F9F9F9] text-[#333333] selection:bg-[#C5A059]/30;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-bold tracking-tight text-[#002D52];
   }
 }
 
 @layer components {
   .btn-premium {
-    @apply px-8 py-3 bg-[#6B705C] text-white rounded-xl transition-all duration-300 hover:bg-[#5a5e4d] hover:shadow-lg active:scale-95 disabled:opacity-50 text-xs font-bold uppercase tracking-widest;
+    @apply px-8 py-3 bg-[#002D52] text-white rounded-xl transition-all duration-300 hover:bg-[#001A33] hover:shadow-[0_0_20px_rgba(0,45,82,0.3)] active:scale-95 disabled:opacity-50 text-xs font-bold uppercase tracking-widest border border-[#C5A059];
   }
 
   .card-premium {
-    @apply bg-white rounded-3xl border border-[#E5E5E5] shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+    @apply bg-white rounded-3xl border border-[#002D52]/10 shadow-sm transition-all duration-300 hover:border-[#C5A059]/50 hover:shadow-[0_10px_30px_rgba(0,45,82,0.1)] hover:-translate-y-1 overflow-hidden;
   }
 
   .input-premium {
-    @apply w-full bg-white border border-[#E5E5E5] rounded-xl px-5 py-3.5 text-[#111111] placeholder-[#666666] focus:outline-none focus:border-[#6B705C] transition-all duration-300 font-medium shadow-sm;
+    @apply w-full bg-white border border-[#002D52]/20 rounded-xl px-5 py-3.5 text-[#333333] placeholder-[#333333]/50 focus:outline-none focus:border-[#C5A059] transition-all duration-300 font-medium shadow-sm focus:shadow-[0_0_15px_rgba(197,160,89,0.15)];
   }
 
   .fade-in {
@@ -42,6 +52,14 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  .glass-nav {
+    @apply bg-[#002D52]/95 backdrop-blur-xl border-b border-[#C5A059]/20;
+  }
+  
+  .glass-card {
+    @apply bg-white backdrop-blur-lg border border-[#002D52]/10 rounded-2xl shadow-sm;
+  }
 }
 
 @keyframes fadeIn {
@@ -55,14 +73,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F7F7F5;
+  background: #F9F9F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E5E5E5;
+  background: #002D52;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6B705C;
+  background: #C5A059;
 }

@@ -28,48 +28,48 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      <div className={`fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsOpen(false)} />
-      <aside className={`z-50 bg-white border-r border-[#E5E5E5] flex flex-col transition-all duration-300 shrink-0 ${isOpen ? 'fixed lg:static inset-y-0 left-0 w-64' : 'w-20'}`}>
-        <div className={`p-6 border-b border-[#E5E5E5] h-[72px] flex items-center ${isOpen ? 'justify-between' : 'justify-center'}`}>
+      <div className={`fixed inset-0 bg-[#002D52]/80 backdrop-blur-sm z-40 lg:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsOpen(false)} />
+      <aside className={`z-50 bg-[#002D52] border-r border-white/10 flex flex-col transition-all duration-300 shrink-0 shadow-[4px_0_24px_rgba(0,45,82,0.15)] ${isOpen ? 'fixed lg:static inset-y-0 left-0 w-72' : 'w-24'}`}>
+        <div className={`p-6 h-24 flex items-center border-b border-white/10 ${isOpen ? 'justify-between' : 'justify-center'}`}>
           {isOpen && (
-            <Link to="/admin/dashboard" className="flex items-center gap-3">
-               <div className="w-8 h-8 bg-[#6B705C] shrink-0 rounded-xl flex items-center justify-center text-white">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-               </div>
-               <span className="text-lg font-bold tracking-[0.2em] text-[#111111]">ADMIN</span>
+            <Link to="/admin/dashboard" className="flex items-center gap-4 group">
+              <div className="w-10 h-10 border-2 border-white shrink-0 rounded-xl flex items-center justify-center text-white transition-all group-hover:bg-[#C5A059] group-hover:border-[#C5A059]">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </div>
+              <span className="text-lg font-black tracking-[0.2em] text-white">ADMIN</span>
             </Link>
           )}
-          <button onClick={() => setIsOpen(!isOpen)} className="text-[#111111] hover:text-[#6B705C] transition-colors">
+          <button onClick={() => setIsOpen(!isOpen)} className="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-               {isOpen ? (
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-               ) : (
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-               )}
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
         </div>
-        
-        <div className={`flex-1 overflow-y-auto py-6 space-y-2 no-scrollbar ${isOpen ? 'px-4' : 'px-3'}`}>
+
+        <div className={`flex-1 overflow-y-auto py-8 space-y-3 no-scrollbar ${isOpen ? 'px-6' : 'px-4'}`}>
           {navItems.map((item) => (
-            <NavLink 
-              key={item.name} 
+            <NavLink
+              key={item.name}
               to={item.path}
               end={item.exact}
               onClick={() => window.innerWidth < 1024 && setIsOpen(false)}
               className={({ isActive }) => `
-                flex items-center ${isOpen ? 'gap-3 px-5' : 'justify-center px-0'} py-4 rounded-2xl text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300
-                ${isActive 
-                  ? 'bg-[#111111] text-white shadow-[0_20px_40px_rgba(0,0,0,0.1)] scale-[1.02]' 
-                  : 'text-[#666666] hover:bg-[#F7F7F5] hover:text-[#111111] hover:translate-x-1'}
+                flex items-center ${isOpen ? 'gap-4 px-4' : 'justify-center px-0'} py-3.5 rounded-2xl text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300
+                ${isActive
+                  ? 'bg-[#C5A059] text-white shadow-[0_10px_20px_rgba(197,160,89,0.3)]'
+                  : 'text-white/70 hover:bg-white/10 hover:text-white'}
               `}
               title={!isOpen ? item.name : undefined}
             >
               {({ isActive }) => (
                 <>
-                  <div className={`p-2 rounded-lg transition-colors shrink-0 ${isActive ? 'bg-white/10' : 'bg-transparent'}`}>
+                  <div className={`p-2 rounded-xl transition-colors shrink-0 ${isActive ? 'bg-white/20' : 'bg-transparent'}`}>
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                     </svg>
@@ -80,18 +80,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </NavLink>
           ))}
         </div>
-        
-        <div className="p-4 border-t border-[#E5E5E5]">
-           <button 
-             onClick={handleLogout}
-             className={`flex items-center ${isOpen ? 'gap-3 px-4' : 'justify-center px-0'} w-full py-3 rounded-xl text-xs font-bold tracking-wider uppercase text-red-500 hover:bg-red-50 transition-colors`}
-             title={!isOpen ? "Logout" : undefined}
-           >
-              <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+        <div className="p-6 border-t border-white/10">
+          <button
+            onClick={handleLogout}
+            className={`flex items-center ${isOpen ? 'gap-4 px-4' : 'justify-center px-0'} w-full py-4 rounded-xl text-[10px] font-bold tracking-[0.2em] uppercase text-red-400 hover:bg-red-500/20 transition-colors`}
+            title={!isOpen ? "Logout" : undefined}
+          >
+            <div className="p-2 shrink-0">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              {isOpen && <span>Logout</span>}
-           </button>
+            </div>
+            {isOpen && <span>Logout</span>}
+          </button>
         </div>
       </aside>
     </>
