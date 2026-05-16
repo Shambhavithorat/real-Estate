@@ -8,6 +8,7 @@ const AllProperties = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [editingPropertyId, setEditingPropertyId] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [newProperty, setNewProperty] = useState({
     title: '', price: '', propertyType: 'Villa', listingType: 'Sale',
     beds: '', baths: '', sqft: '', furnishing: 'Fully Furnished',
@@ -23,6 +24,11 @@ const AllProperties = () => {
     });
     return () => unsubscribe();
   }, []);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4000);
+  };
 
   const resetForm = () => {
     setNewProperty({
@@ -49,9 +55,9 @@ const AllProperties = () => {
     if (window.confirm("Are you sure?")) {
       try {
         await propertyService.deleteProperty(id);
-        alert("Deleted!");
+        showToast("Property deleted successfully");
       } catch (err) {
-        alert("Error deleting");
+        showToast("Error deleting property", "error");
       }
     }
   };
@@ -78,9 +84,9 @@ const AllProperties = () => {
       
       setShowAddModal(false);
       resetForm();
-      alert("Success!");
+      showToast(editingPropertyId ? "Property updated successfully!" : "Property added successfully!");
     } catch (err) {
-      alert("Error saving");
+      showToast("Error saving property", "error");
     }
   };
 
@@ -133,6 +139,28 @@ const AllProperties = () => {
           </table>
         </div>
       </div>
+
+      {toast.show && createPortal(
+        <div className="fixed bottom-8 right-8 z-[100000] animate-in slide-in-from-bottom-5 fade-in duration-300">
+          <div className="bg-[#002D52] border border-[#C5A059]/30 shadow-[0_20px_50px_rgba(0,45,82,0.3)] rounded-2xl p-5 flex items-center gap-4 min-w-[320px]">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${toast.type === 'success' ? 'bg-[#C5A059]/20 text-[#C5A059]' : 'bg-red-500/20 text-red-400'}`}>
+              {toast.type === 'success' ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+              )}
+            </div>
+            <div>
+              <h4 className="text-white font-bold text-sm tracking-wide">{toast.type === 'success' ? 'Success' : 'Error'}</h4>
+              <p className="text-white/70 text-xs font-medium mt-1">{toast.message}</p>
+            </div>
+            <button onClick={() => setToast({ show: false, message: '', type: 'success' })} className="ml-auto text-white/40 hover:text-white transition-colors p-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {showAddModal && createPortal(
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-hidden">
